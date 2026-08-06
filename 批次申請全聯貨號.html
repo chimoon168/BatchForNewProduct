@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>批次申請全聯貨號 - 全電商後台</title>
+<style>
+  :root{
+    --primary:#169BD5;
+    --primary-dark:#0F7FB0;
+    --pink:#DF0870;
+    --text:#333333;
+    --text-sub:#999999;
+    --sidebar-bg:#1B2A4A;
+    --sidebar-bg2:#20325a;
+    --sidebar-active:#28406e;
+    --border:#E3E6EB;
+    --bg:#F4F6F9;
+    --green:#2E9E5B;
+    --orange:#E8912D;
+    --red:#D0362C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;
+    color:var(--text);
+    background:var(--bg);
+  }
+  .app{display:flex;min-height:100vh;}
+
+  /* Sidebar */
+  .sidebar{
+    width:230px;flex-shrink:0;background:var(--sidebar-bg);color:#fff;
+    display:flex;flex-direction:column;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;padding:18px 16px;font-weight:700;font-size:16px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .brand .logo{
+    width:28px;height:28px;border-radius:6px;background:#fff;color:var(--sidebar-bg);
+    display:flex;align-items:center;justify-content:center;font-size:14px;
+  }
+  .tenant{padding:14px 16px 6px;font-size:15px;font-weight:700;color:#fff;}
+  .nav{flex:1;overflow-y:auto;padding:6px 0 20px;}
+  .nav-item{
+    display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:14px;
+    color:#cfd8ea;cursor:pointer;position:relative;
+  }
+  .nav-item .ic{width:16px;text-align:center;font-size:13px;opacity:.85;}
+  .nav-item.group{color:#fff;font-weight:600;}
+  .nav-item.child{padding-left:34px;font-size:13px;}
+  .nav-item.child.active{
+    background:var(--sidebar-active);color:#fff;font-weight:700;
+  }
+  .nav-item.child.active::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary);
+  }
+  .nav-item.child:hover{background:rgba(255,255,255,0.06);}
+  .nav-item.group .chevron{margin-left:auto;font-size:11px;transition:transform .2s;}
+  .nav-item.group.expanded .chevron{transform:rotate(180deg);}
+  .nav-children{overflow:hidden;}
+
+  /* Main */
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;}
+  .topbar{
+    height:60px;background:#fff;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;padding:0 20px;
+  }
+  .crumbs{color:#8993A4;font-size:14px;}
+  .crumbs b{color:var(--text);font-weight:600;}
+  .top-actions{display:flex;align-items:center;gap:12px;}
+  .pill-btn{
+    display:flex;align-items:center;gap:6px;border:1px solid var(--primary);color:var(--primary);
+    background:#EAF6FC;padding:7px 14px;border-radius:6px;font-size:13px;cursor:pointer;
+  }
+  .switch-wrap{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-sub);}
+  .switch{width:34px;height:18px;border-radius:10px;background:#D9DEE6;position:relative;}
+  .switch::after{content:"";position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:2px;left:2px;box-shadow:0 1px 2px rgba(0,0,0,.3);}
+  .avatar{
+    width:30px;height:30px;border-radius:50%;background:#EFA75C;display:flex;align-items:center;
+    justify-content:center;color:#fff;font-weight:700;font-size:13px;
+  }
+  .user-name{font-size:13px;color:var(--text);font-weight:600;}
+
+  .content{padding:18px 22px;flex:1;}
+  .page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px;}
+  .page-title{font-size:20px;font-weight:700;color:var(--text);}
+  .head-actions{display:flex;gap:8px;}
+  .outline-btn{
+    border:1px solid var(--primary);color:var(--primary);background:#fff;padding:6px 12px;
+    border-radius:6px;font-size:13px;cursor:pointer;
+  }
+
+  .card{background:#fff;border-radius:8px;border:1px solid var(--border);}
+
+  /* Step tabs (4 steps) */
+  .step-tabs{display:flex;border-bottom:1px solid var(--border);padding:0 16px;}
+  .step-tab{
+    padding:11px 16px;font-size:14px;color:#8993A4;cursor:pointer;position:relative;
+    display:flex;align-items:center;gap:6px;
+  }
+  .step-tab .num{
+    width:18px;height:18px;border-radius:50%;background:#E3E6EB;color:#8993A4;font-size:11px;
+    display:flex;align-items:center;justify-content:center;font-weight:700;
+  }
+  .step-tab.active{color:var(--primary);font-weight:700;}
+  .step-tab.active .num{background:var(--primary);color:#fff;}
+  .step-tab.active::after{
+    content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--primary);
+  }
+  .step-tab:not(.active):hover{color:var(--text);}
+
+  .step-panel{padding:16px 18px 20px;display:none;}
+  .step-panel.active{display:block;}
+
+  .section-title{font-size:14px;font-weight:700;color:var(--text);margin:0 0 8px;}
+  .subtle{color:var(--text-sub);font-size:13px;}
+
+  .selector-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+  .selector-box{border:1px solid var(--border);border-radius:8px;padding:12px;}
+  .cat-row{display:flex;gap:6px;margin-bottom:8px;}
+  select, input[type=text]{
+    border:1px solid var(--border);border-radius:6px;padding:6px 9px;font-size:13px;color:var(--text);
+    background:#fff;
+  }
+  .cat-row select{flex:1;min-width:0;}
+  .add-cat-btn{
+    display:inline-flex;align-items:center;gap:6px;color:var(--primary);font-size:13px;cursor:pointer;
+    border:1px dashed var(--primary);border-radius:6px;padding:4px 10px;background:#EAF6FC;
+  }
+  .chip-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+  .chip{
+    background:#EAF6FC;color:var(--primary-dark);border:1px solid #BEE4F4;border-radius:14px;
+    padding:3px 8px 3px 10px;font-size:12px;display:flex;align-items:center;gap:6px;
+  }
+  .chip .x{cursor:pointer;color:var(--primary-dark);font-weight:700;}
+
+  .brand-search{display:flex;gap:8px;margin-bottom:6px;}
+  .brand-search input{flex:1;}
+  .brand-list{max-height:130px;overflow-y:auto;border:1px solid var(--border);border-radius:6px;padding:6px;}
+  .brand-list label{display:flex;align-items:center;gap:8px;font-size:13px;padding:3px 4px;color:var(--text);}
+  .link-action{color:var(--primary);font-size:12px;cursor:pointer;}
+
+  .action-row{display:flex;justify-content:flex-end;gap:8px;margin-top:4px;}
+  .primary-btn{
+    background:var(--primary);color:#fff;border:none;border-radius:6px;padding:8px 18px;
+    font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;
+    align-items:center;justify-content:center;
+  }
+  .primary-btn:disabled{background:#B9DCEE;cursor:not-allowed;}
+  .ghost-btn{
+    background:#fff;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 14px;
+    font-size:14px;cursor:pointer;
+  }
+  .ghost-btn:disabled{opacity:.45;cursor:not-allowed;}
+  .ghost-btn.is-disabled{opacity:.45;cursor:not-allowed;pointer-events:none;}
+
+  .upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+  .upload-box{border:1px dashed #C6CEDA;border-radius:8px;padding:14px;text-align:center;background:#FAFBFD;}
+  .upload-box .icon{font-size:24px;color:var(--primary);margin-bottom:6px;}
+  .upload-box .fname{font-size:13px;color:var(--text);margin-bottom:4px;font-weight:600;}
+  .choose-btn{
+    border:1px solid var(--border);background:#fff;border-radius:6px;padding:6px 14px;font-size:13px;
+    color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+  }
+  .hint{font-size:12px;color:var(--text-sub);margin-top:6px;}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  thead th{
+    background:#F4F6F9;color:#7A8496;font-weight:600;text-align:left;padding:7px 10px;
+    border-bottom:1px solid var(--border);white-space:nowrap;
+  }
+  tbody td{padding:6px 10px;border-bottom:1px solid var(--border);color:var(--text);white-space:nowrap;}
+  tbody tr:hover{background:#FAFBFD;}
+
+  .tag{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600;}
+  .tag.success{background:#E6F6EC;color:var(--green);}
+  .tag.pending{background:#FDF1E2;color:var(--orange);}
+  .tag.fail{background:#FCEAEA;color:var(--red);}
+  .tag.draft{background:#EEF0F4;color:#7A8496;}
+  .tag.review{background:#E9F0FE;color:#3E6FE0;}
+
+  .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+  .filter-bar{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:12px;}
+  .filter-bar .fld{display:flex;flex-direction:row;align-items:center;gap:6px;}
+  .filter-bar label{font-size:12px;color:var(--text-sub);white-space:nowrap;flex-shrink:0;}
+
+  .sel-count{font-size:13px;color:var(--text-sub);}
+  .sel-count b{color:var(--primary);}
+
+  .pagination{display:flex;justify-content:flex-end;align-items:center;gap:6px;margin-top:10px;font-size:13px;color:var(--text-sub);}
+  .pagination .pg{
+    width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--border);cursor:pointer;
+  }
+  .pagination .pg.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+
+  .progress-flow{display:flex;align-items:center;margin-bottom:14px;}
+  .flow-step{display:flex;align-items:center;gap:6px;color:var(--text-sub);font-size:13px;}
+  .flow-step .dot{width:18px;height:18px;border-radius:50%;background:#E3E6EB;display:flex;align-items:center;justify-content:center;font-size:11px;color:#8993A4;font-weight:700;}
+  .flow-step.done .dot{background:var(--green);color:#fff;}
+  .flow-step.current .dot{background:var(--primary);color:#fff;}
+  .flow-step.current{color:var(--primary);font-weight:700;}
+  .flow-line{width:36px;height:1px;background:var(--border);margin:0 8px;}
+
+  .steps-note{margin-top:14px;padding-top:10px;border-top:1px solid var(--border);}
+  .steps-note ol{margin:6px 0 0;padding-left:18px;color:var(--text);font-size:13px;line-height:1.55;}
+
+  .small-btn{
+    border:1px solid var(--border);background:#fff;color:var(--text);border-radius:5px;
+    padding:4px 8px;font-size:12px;cursor:pointer;margin-right:4px;
+  }
+  .small-btn.blue{border-color:var(--primary);color:var(--primary);}
+  .small-btn.red{border-color:var(--red);color:var(--red);}
+
+  /* Important rule banner (Step 1) */
+  .rule-banner{
+    background:linear-gradient(0deg,#FDF1F7,#FDF1F7),#fff;
+    border:1px solid #F6C7DF;border-left:4px solid var(--pink);border-radius:8px;
+    padding:14px 16px;margin-bottom:14px;
+  }
+  .rule-banner-head{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--pink);margin-bottom:8px;}
+  .rule-banner-head .warn-ic{font-size:16px;}
+  .rule-sub-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;}
+  .rule-options{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;}
+  .rule-opt{
+    display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #F6C7DF;border-radius:6px;
+    padding:8px 12px;font-size:13px;color:var(--text);flex:1;min-width:200px;
+  }
+  .rule-opt .opt-num{
+    width:20px;height:20px;flex-shrink:0;border-radius:50%;background:var(--pink);color:#fff;
+    font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  }
+  .rule-note{font-size:12.5px;color:var(--pink);font-weight:700;}
+
+  .check-legend{font-size:12px;color:var(--text-sub);margin-top:4px;}
+  .table-scroll{overflow-x:auto;overflow-y:hidden;border:1px solid var(--border);border-radius:6px;padding-bottom:2px;}
+  .table-scroll table{min-width:1280px;}
+  .table-scroll::-webkit-scrollbar{height:10px;}
+  .table-scroll::-webkit-scrollbar-track{background:#F4F6F9;}
+  .table-scroll::-webkit-scrollbar-thumb{background:#C6CEDA;border-radius:5px;}
+  .table-scroll::-webkit-scrollbar-thumb:hover{background:#AEB9C8;}
+  tr.row-blocked td{background:#FFF7F9;}
+  .fail-note{color:var(--red);font-size:11px;margin-left:2px;}
+  input[type=checkbox]:disabled{cursor:not-allowed;}
+  .cell-link{font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;}
+  .cell-link.pass{color:var(--green);}
+  .cell-link.pass:hover{text-decoration:underline;}
+  .cell-link.edit{color:var(--pink);text-decoration:underline;}
+
+  textarea{
+    border:1px solid var(--border);border-radius:6px;padding:6px 9px;font-size:13px;color:var(--text);
+    background:#fff;font-family:inherit;resize:vertical;
+  }
+  .result-count{font-size:13px;color:var(--text-sub);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .result-count b{color:var(--text);}
+  .open-newpage-btn{
+    border:1px solid var(--primary);color:var(--primary);background:#fff;padding:5px 12px;
+    border-radius:6px;font-size:12.5px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;
+    white-space:nowrap;flex-shrink:0;
+  }
+  .toolbar-v2{margin-bottom:10px;}
+  .btn-row-left{display:flex;gap:10px;margin-bottom:8px;}
+  .pagination-row{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:13px;color:var(--text-sub);}
+  .page-size-select{display:flex;align-items:center;gap:6px;}
+  .page-size-select select{padding:5px 8px;}
+  .pg-group{display:flex;align-items:center;gap:6px;}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:none;align-items:center;justify-content:center;z-index:1000;}
+  .modal-box{background:#fff;border-radius:10px;padding:24px 28px;min-width:320px;max-width:90vw;box-shadow:0 8px 30px rgba(0,0,0,0.2);}
+  .modal-text{font-size:15px;color:var(--text);margin-bottom:20px;line-height:1.6;}
+  .modal-actions{display:flex;justify-content:flex-end;gap:10px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="brand"><div class="logo">全</div>全電商</div>
+    <div class="tenant">咖啡飾品有限公司</div>
+    <div class="nav">
+      <div class="nav-item"><span class="ic">🔔</span>公告事項查詢</div>
+      <div class="nav-item group"><span class="ic">👤</span>供應商帳號與資料管理</div>
+      <div class="nav-item group"><span class="ic">🏷️</span>申請全聯貨號</div>
+      <div class="nav-item child active" onclick="location.href='批次申請全聯貨號.html'">批次申請全聯貨號</div>
+      <div class="nav-item child" onclick="location.href='商品單一提報.html'">單一申請全聯貨號</div>
+      <div class="nav-item child" onclick="location.href='草稿查詢與送審.html?from=preorder'">草稿查詢與送審</div>
+      <div class="nav-item child">貨號申請進度</div>
+      <div class="nav-item group"><span class="ic">🛍️</span>全聯預購商品</div>
+      <div class="nav-item child">商品查詢與修改</div>
+      <div class="nav-item child">商品欄位批次修改</div>
+      <div class="nav-item child">商品加減量</div>
+      <div class="nav-item child">商品上下架</div>
+      <div class="nav-item child">商品異動申請進度</div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div class="crumbs">首頁 / 申請全聯貨號 / <b>批次申請全聯貨號</b></div>
+      <div class="top-actions">
+        <div class="pill-btn">⬆ 上傳紀錄結果</div>
+        <div class="pill-btn">⬇ 下載紀錄結果</div>
+        <div class="switch-wrap"><div class="switch"></div>一般模式</div>
+        <div class="avatar">C</div>
+        <div class="user-name">Chimoon</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-head">
+        <div class="page-title">批次申請全聯貨號</div>
+        <div class="head-actions">
+          <div class="outline-btn">品牌代號速查</div>
+          <div class="outline-btn">編碼對照表</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <!-- 4 step tabs -->
+        <div class="step-tabs">
+          <div class="step-tab active" onclick="showStep(1,this)"><span class="num">1</span>下載商品範本</div>
+          <div class="step-tab" onclick="showStep(2,this)"><span class="num">2</span>上傳商品檔</div>
+          <div class="step-tab" onclick="showStep(3,this)"><span class="num">3</span>下載標籤編輯檔</div>
+          <div class="step-tab" onclick="showStep(4,this)"><span class="num">4</span>上傳標籤檔</div>
+          <div class="step-tab" onclick="location.href='草稿查詢與送審.html?from=preorder'"><span class="num">5</span>草稿查詢與送審</div>
+        </div>
+
+        <!-- STEP 1 -->
+        <div class="step-panel active" id="panel-1">
+          <div class="section-title">選擇提報範圍，產生商品批次範本</div>
+          <div class="selector-grid">
+            <div class="selector-box">
+              <div class="section-title" style="font-size:14px;">全聯分類（四層）</div>
+              <div class="cat-row">
+                <select><option>大分類 - 飾品配件</option></select>
+                <select><option>中分類 - 耳環</option></select>
+                <select><option>小分類 - 耳針式</option></select>
+                <select><option>細分類 - 925純銀</option></select>
+              </div>
+              <div class="add-cat-btn">＋ 新增分類組合</div>
+              <div class="chip-list">
+                <div class="chip">飾品配件 &gt; 耳環 &gt; 耳針式 &gt; 925純銀 <span class="x">✕</span></div>
+                <div class="chip">飾品配件 &gt; 項鍊 &gt; 短鍊 &gt; 不鏽鋼 <span class="x">✕</span></div>
+              </div>
+            </div>
+            <div class="selector-box">
+              <div class="section-title" style="font-size:14px;">品牌選擇</div>
+              <div class="brand-search">
+                <input type="text" placeholder="輸入品牌關鍵字搜尋" style="width:100%;">
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <span class="link-action">全選</span><span class="link-action">清除已選</span>
+              </div>
+              <div class="brand-list">
+                <label><input type="checkbox" checked> BR001 咖咖飾品自有品牌</label>
+                <label><input type="checkbox" checked> BR014 Lumi Silver</label>
+                <label><input type="checkbox"> BR022 Petit Charm</label>
+                <label><input type="checkbox"> BR033 銀河系飾品</label>
+                <label><input type="checkbox"> BR041 木子物件</label>
+              </div>
+              <div class="chip-list">
+                <div class="chip">BR001 咖咖飾品自有品牌 <span class="x">✕</span></div>
+                <div class="chip">BR014 Lumi Silver <span class="x">✕</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="action-row">
+            <div class="ghost-btn" onclick="clearSelections()">清除選擇</div>
+            <a class="primary-btn" href="全聯貨號批次申請範本_UAT.xlsx" download="全聯預購批次申請貨號0123.xlsx" onclick="setTemplateDownloadName(this)">產生批次商品範本 EXCEL</a>
+          </div>
+
+          <div class="steps-note">
+            <div class="subtle" style="font-weight:700;color:var(--text);">供應商操作步驟：</div>
+            <ol>
+              <li>勾選欲提報之全聯分類（四層）與品牌，可複選多組分類。</li>
+              <li>按【產生批次商品範本EXCEL】，下載空白範本至本機填寫商品資料。</li>
+              <li>填寫完成後，至步驟2「上傳商品檔」上傳範本與圖檔。</li>
+            </ol>
+          </div>
+
+          <div class="rule-banner">
+            <div class="rule-banner-head"><span class="warn-ic">⚠️</span>重要規則：申請商品貨號需提供完整且正確的商品標籤</div>
+            <div class="rule-sub-title">商品標籤提供3種建立方式：</div>
+            <div class="rule-options">
+              <div class="rule-opt"><span class="opt-num">1</span>自行填寫</div>
+              <div class="rule-opt"><span class="opt-num">2</span>AI小標籤幫手自動生成</div>
+              <div class="rule-opt"><span class="opt-num">3</span>複製相同標籤的商品（需使用相同標籤母表）</div>
+            </div>
+            <div class="rule-note">※ 方式 1、2 產生之標籤均須經過檢測合格，才能送審。</div>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step-panel" id="panel-2">
+          <div class="section-title">上傳已填寫完成之商品檔與圖檔</div>
+          <div class="upload-grid">
+            <div class="upload-box">
+              <div class="icon">📄</div>
+              <div class="fname">尚未選擇檔案</div>
+              <button class="choose-btn">📁 選擇商品範本EXCEL</button>
+              <div class="hint">請上傳步驟1下載並填寫完成之商品範本EXCEL</div>
+            </div>
+            <div class="upload-box">
+              <div class="icon">🖼️</div>
+              <div class="fname">尚未選擇圖檔（可多選）</div>
+              <button class="choose-btn">📁 選擇商品圖檔</button>
+              <div class="hint">檔名需與範本內圖片欄位一致，支援 jpg / png</div>
+            </div>
+          </div>
+          <div class="action-row">
+            <button class="primary-btn">檢核檔案並打包上傳</button>
+          </div>
+
+          <div class="section-title" style="margin-top:26px;">上傳紀錄</div>
+          <table>
+            <thead>
+              <tr><th>檔案名稱</th><th>上傳時間</th><th>商品筆數</th><th>狀態</th><th>操作</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2026Q3新品耳環.zip</td><td>2026-08-03 09:12</td><td>86</td>
+                <td><span class="tag success">處理完成</span></td>
+                <td><span class="link-action">下載結果</span></td>
+              </tr>
+              <tr>
+                <td>2026Q3項鍊補件.zip</td><td>2026-08-02 16:40</td><td>23</td>
+                <td><span class="tag fail">格式錯誤</span></td>
+                <td><span class="link-action">下載錯誤訊息</span></td>
+              </tr>
+              <tr>
+                <td>2026Q3手鍊系列.zip</td><td>2026-08-02 11:05</td><td>54</td>
+                <td><span class="tag pending">處理中</span></td>
+                <td><span class="link-action">查看進度</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="steps-note">
+            <div class="subtle" style="font-weight:700;color:var(--text);">供應商操作步驟：</div>
+            <ol>
+              <li>選擇已填寫完成之商品範本EXCEL，及對應之商品圖檔（可多選）。</li>
+              <li>按【打包並上傳ZIP】，系統將自動打包並送出驗證。</li>
+              <li>可於下方「上傳紀錄」查看處理狀態，如有格式錯誤請下載錯誤訊息修正後重新上傳。</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step-panel" id="panel-3">
+          <div class="section-title">查詢商品並下載標籤編輯檔</div>
+          <div class="filter-bar">
+            <div class="fld"><label>商品名稱</label><input type="text" placeholder="輸入商品名稱關鍵字"></div>
+            <div class="fld"><label>規格型號</label><input type="text" placeholder="輸入規格型號關鍵字"></div>
+            <div class="fld"><label>全聯分類</label>
+              <select style="min-width:260px;">
+                <option>全部分類</option>
+                <option>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類_77010501</option>
+                <option>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;髮飾&gt;髮束_77010403</option>
+                <option>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;髮飾&gt;邊夾_77010401</option>
+              </select>
+            </div>
+            <div class="fld"><label>標籤母表</label>
+              <select style="min-width:200px;">
+                <option>全部母表</option>
+                <option>飾品</option>
+                <option>髮飾</option>
+                <option>包包</option>
+                <option>餐具</option>
+                <option>鍋具/鍋具配件</option>
+              </select>
+            </div>
+            <div class="fld"><label>標籤建立日期（起）</label><input type="date" value="2026-02-03"></div>
+            <div class="fld"><label>標籤建立日期（迄）</label><input type="date" value="2026-08-03"></div>
+          </div>
+          <div class="filter-bar">
+            <div class="fld" style="flex:1;max-width:420px;">
+              <label>草稿編號（可多筆，每行一筆）</label>
+              <textarea rows="2" style="width:100%;" placeholder="例如：&#10;100032&#10;100033"></textarea>
+            </div>
+          </div>
+          <div class="btn-row-left">
+            <button class="primary-btn" style="padding:6px 16px;">查詢</button>
+            <div class="ghost-btn">清除</div>
+          </div>
+
+          <hr style="border:none;border-top:1px solid var(--border);margin:14px 0;">
+
+          <div class="result-count" style="justify-content:flex-start;">
+            <span>查詢結果（共 <b>20</b> 筆）</span>
+            <div class="check-legend" style="margin-top:0;">「通過」= 標籤已檢測合格　「編輯」= 尚未通過，需點擊修正並勾選後下載標籤編輯檔　「未填」= 尚未建立標籤</div>
+          </div>
+          <div class="toolbar-v2">
+            <div class="btn-row-left" style="align-items:center;margin-bottom:0;">
+              <button id="panel3DownloadBtn" class="primary-btn" disabled>⬇ 下載標籤編輯檔</button>
+              <button class="open-newpage-btn" style="padding:8px 18px;font-size:14px;font-weight:700;" onclick="window.open('查詢結果_預購_標籤編輯檔.html','_blank')">↗ 查詢結果另開新頁面</button>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" onclick="document.querySelectorAll('#panel-3 .dl-check').forEach(function(cb){cb.checked=this.checked;}.bind(this))" title="全選下載"></th><th>No</th><th>標籤</th><th>標籤母表</th><th>草稿編號</th><th>商品名稱</th>
+                <th>規格型號</th><th>品牌</th><th>全聯分類</th><th>標籤建立日期</th><th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td><td>1</td><td><span class="cell-link pass">通過</span></td><td>飾品</td><td>100032</td><td>韓系925純銀鑲嵌天然淡水珍珠耳針女神氣質百搭抗過敏耳環送禮首選推薦</td>
+                <td>ER-PL925-01</td><td>Lumi Silver</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-08-01</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked class="dl-check"></td><td>2</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100033</td><td>復古典雅水滴造型項鍊女士鎖骨鍊氣質百搭日常穿搭時尚飾品送禮首選推薦</td>
+                <td>NK-VT-02</td><td>咖咖飾品自有品牌</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-08-01</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked class="dl-check"></td><td>3</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100034</td><td>簡約幾何線條造型手鍊女士合金材質百搭手飾日常上班穿搭配件送禮推薦款</td>
+                <td>BR-GEO-03</td><td>木子物件</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-30</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td></td><td>4</td><td><span class="cell-link pass">通過</span></td><td>飾品</td><td>100035</td><td>極簡風格開口戒指三件組合925純銀材質女士食指戒尾戒疊戴百搭送禮推薦款</td>
+                <td>RG-SET-04</td><td>咖咖飾品自有品牌</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-29</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked class="dl-check"></td><td>5</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100036</td><td>法式復古珍珠水滴耳環925銀針女士氣質百搭日常上班約會穿搭送禮款</td>
+                <td>ER-DR-05</td><td>微光珠寶</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-28</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="dl-check"></td><td>6</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100037</td><td>極簡C字項鍊女士鎖骨鍊316不鏽鋼材質防過敏百搭日常穿搭送禮推薦</td>
+                <td>NK-CH-06</td><td>悅己銀飾</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-27</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td></td><td>7</td><td><span class="cell-link pass">通過</span></td><td>飾品</td><td>100038</td><td>韓系氣質珍珠手鍊女士單圈設計百搭日常上班約會穿搭飾品送禮首選</td>
+                <td>BR-PL-07</td><td>Lumi Silver</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-26</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="dl-check"></td><td>8</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100039</td><td>極簡雙層戒指女士925純銀材質食指戒疊戴百搭日常穿搭送禮推薦款式</td>
+                <td>RG-MIN-08</td><td>銀飾坊</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-25</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked class="dl-check"></td><td>9</td><td><span class="cell-link edit">編輯</span></td><td>髮飾</td><td>100040</td><td>法式復古玳瑁髮箍女士寬版顯瘦百搭日常上班約會穿搭配件送禮推薦</td>
+                <td>HR-CL-09</td><td>潮流飾品苑</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;髮飾&gt;髮束</td><td>2026-07-24</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td></td><td>10</td><td><span class="cell-link pass">通過</span></td><td>飾品</td><td>100041</td><td>極簡幾何愛心耳環女士925銀針百搭日常上班約會穿搭飾品送禮推薦款</td>
+                <td>ER-HP-10</td><td>木子物件</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-23</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked class="dl-check"></td><td>11</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100042</td><td>復古方形吊墜項鍊女士316不鏽鋼防過敏百搭日常穿搭配件送禮首選</td>
+                <td>NK-PD-11</td><td>咖咖飾品自有品牌</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-22</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="dl-check"></td><td>12</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100043</td><td>極簡鎖鏈手鍊女士925純銀材質單圈設計百搭日常上班穿搭送禮推薦款</td>
+                <td>BR-CH-12</td><td>悅己銀飾</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-21</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td></td><td>13</td><td><span class="cell-link pass">通過</span></td><td>飾品</td><td>100044</td><td>韓系氣質珍珠戒指女士開口式設計百搭日常上班約會穿搭飾品送禮款</td>
+                <td>RG-PR-13</td><td>微光珠寶</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-20</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="dl-check"></td><td>14</td><td><span class="cell-link edit">編輯</span></td><td>髮飾</td><td>100045</td><td>法式蝴蝶結髮夾女士邊夾造型百搭日常上班約會穿搭配件送禮推薦款</td>
+                <td>HR-BD-14</td><td>潮流飾品苑</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;髮飾&gt;邊夾</td><td>2026-07-19</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked class="dl-check"></td><td>15</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100046</td><td>極簡幾何方形耳環女士925銀針防過敏百搭日常上班約會穿搭送禮款式</td>
+                <td>ER-ST-15</td><td>銀飾坊</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-18</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td></td><td>16</td><td><span class="cell-link pass">通過</span></td><td>飾品</td><td>100047</td><td>韓系氣質羽毛項鍊女士316不鏽鋼材質百搭日常上班穿搭配件送禮首選</td>
+                <td>NK-LY-16</td><td>Lumi Silver</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-17</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked class="dl-check"></td><td>17</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100048</td><td>極簡疊層手鍊組女士合金材質三入組百搭日常上班約會穿搭送禮推薦</td>
+                <td>BR-ST-17</td><td>木子物件</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-16</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="dl-check"></td><td>18</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100049</td><td>雙環交叉造型戒指女士925純銀材質食指戒百搭日常穿搭送禮推薦款式</td>
+                <td>RG-DB-18</td><td>咖咖飾品自有品牌</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-15</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td></td><td>19</td><td><span class="cell-link pass">通過</span></td><td>髮飾</td><td>100050</td><td>法式碎花髮束女士鬆緊綁髮圈百搭日常上班約會穿搭配件送禮推薦款</td>
+                <td>HR-SC-19</td><td>悅己銀飾</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;髮飾&gt;髮束</td><td>2026-07-14</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="dl-check"></td><td>20</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100051</td><td>極簡水鑽耳環女士925銀針閃耀氣質百搭日常上班約會穿搭送禮首選款</td>
+                <td>ER-CR-20</td><td>微光珠寶</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-13</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+          <div class="pagination-row">
+            <div class="page-size-select">每頁顯示
+              <select><option selected>20</option><option>50</option><option>100</option><option>500</option></select>
+              筆　共 20 筆
+            </div>
+            <div class="pg-group">
+              <div class="pg active">1</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="step-panel" id="panel-4">
+          <div class="section-title">上傳已填寫完成之標籤EXCEL檔</div>
+          <div class="upload-grid" style="grid-template-columns:1fr;">
+            <div class="upload-box">
+              <div class="icon">📄</div>
+              <div class="fname">尚未選擇檔案</div>
+              <button class="choose-btn">📁 選擇標籤EXCEL檔</button>
+              <div class="hint">請上傳已填寫完成之商品標籤EXCEL檔</div>
+            </div>
+          </div>
+          <div class="action-row">
+            <button class="primary-btn">檢核檔案並上傳</button>
+          </div>
+
+          <div class="section-title" style="margin-top:26px;">上傳紀錄</div>
+          <table>
+            <thead>
+              <tr><th>檔案名稱</th><th>上傳時間</th><th>標籤筆數</th><th>狀態</th><th>操作</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2026Q3新品標籤.xlsx</td><td>2026-08-03 10:05</td><td>42</td>
+                <td><span class="tag success">處理完成</span></td>
+                <td><span class="link-action">下載結果</span></td>
+              </tr>
+              <tr>
+                <td>2026Q3項鍊標籤補件.xlsx</td><td>2026-08-02 15:20</td><td>12</td>
+                <td><span class="tag fail">格式錯誤</span></td>
+                <td><span class="link-action">下載錯誤訊息</span></td>
+              </tr>
+              <tr>
+                <td>2026Q3手鍊標籤.xlsx</td><td>2026-08-02 09:40</td><td>28</td>
+                <td><span class="tag pending">處理中</span></td>
+                <td><span class="link-action">查看進度</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="steps-note">
+            <div class="subtle" style="font-weight:700;color:var(--text);">供應商操作步驟：</div>
+            <ol>
+              <li>選擇已填寫完成之商品標籤EXCEL檔。</li>
+              <li>按【檢核檔案並上傳】，系統將自動驗證標籤內容並送出。</li>
+              <li>可於下方「上傳紀錄」查看處理狀態，如有格式錯誤請下載錯誤訊息修正後重新上傳。</li>
+            </ol>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal-box">
+    <div class="modal-text" id="deleteModalText">確認刪除？</div>
+    <div class="modal-actions">
+      <button class="ghost-btn" onclick="closeDeleteModal()">返回</button>
+      <button class="primary-btn" style="background:var(--red);" onclick="confirmDeleteAction()">送出</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function refreshBulkDeleteBtn(scope, btnId, checkClass){
+  checkClass = checkClass || 'del-check';
+  var checks = document.querySelectorAll((scope ? scope + ' ' : '') + '.' + checkClass);
+  var any = Array.prototype.some.call(checks, function(cb){ return cb.checked; });
+  var btn = document.getElementById(btnId);
+  if (!btn) return;
+  if (btn.tagName === 'BUTTON') btn.disabled = !any;
+  btn.classList.toggle('is-disabled', !any);
+}
+var _bulkDeleteBtns = [
+  { scope: '#panel-3', id: 'panel3DownloadBtn', checkClass: 'dl-check' }
+];
+document.addEventListener('change', function(e){
+  if (e.target && e.target.matches('input[type=checkbox]')) {
+    _bulkDeleteBtns.forEach(function(cfg){ refreshBulkDeleteBtn(cfg.scope, cfg.id, cfg.checkClass); });
+  }
+});
+_bulkDeleteBtns.forEach(function(cfg){ refreshBulkDeleteBtn(cfg.scope, cfg.id, cfg.checkClass); });
+function toggleNavGroup(id, headerEl){
+  var el = document.getElementById(id);
+  var isOpen = el.style.display !== 'none';
+  el.style.display = isOpen ? 'none' : 'block';
+  headerEl.classList.toggle('expanded', !isOpen);
+}
+function setTemplateDownloadName(el){
+  var supplierCode = '0123';
+  function pad(n){ return (n<10?'0':'')+n; }
+  var now = new Date();
+  var ts = now.getFullYear() + pad(now.getMonth()+1) + pad(now.getDate()) + pad(now.getHours()) + pad(now.getMinutes()) + pad(now.getSeconds());
+  el.setAttribute('download', '全聯預購批次申請貨號' + supplierCode + '_' + ts + '.xlsx');
+}
+function clearSelections(){
+  document.querySelectorAll('#panel-1 .brand-list input[type=checkbox]').forEach(function(cb){ cb.checked = false; });
+  document.querySelectorAll('#panel-1 .chip-list').forEach(function(cl){ cl.innerHTML=''; });
+  var bs = document.querySelector('#panel-1 .brand-search input'); if (bs) bs.value='';
+}
+var _pendingDeleteAction = null;
+function showDeleteConfirm(type, count, onConfirm){
+  var msg = type === 'full'
+    ? ('確認商品主檔+銷售顯示+標籤 全數刪除共' + count + '筆?')
+    : ('確認刪除商品標籤共' + count + '筆?');
+  document.getElementById('deleteModalText').textContent = msg;
+  _pendingDeleteAction = onConfirm;
+  document.getElementById('deleteModal').style.display = 'flex';
+}
+function closeDeleteModal(){
+  document.getElementById('deleteModal').style.display = 'none';
+  _pendingDeleteAction = null;
+}
+function confirmDeleteAction(){
+  if (typeof _pendingDeleteAction === 'function') { _pendingDeleteAction(); }
+  closeDeleteModal();
+}
+function showStep(n, el){
+  document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-'+n).classList.add('active');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>商品單一提報 - 全電商後台</title>
+<style>
+  :root{
+    --primary:#169BD5;
+    --primary-dark:#0F7FB0;
+    --pink:#DF0870;
+    --text:#333333;
+    --text-sub:#999999;
+    --sidebar-bg:#1B2A4A;
+    --sidebar-bg2:#20325a;
+    --sidebar-active:#28406e;
+    --border:#E3E6EB;
+    --bg:#F4F6F9;
+    --green:#2E9E5B;
+    --orange:#E8912D;
+    --red:#D0362C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;
+    color:var(--text);
+    background:var(--bg);
+  }
+  .app{display:flex;min-height:100vh;}
+
+  .sidebar{
+    width:230px;flex-shrink:0;background:var(--sidebar-bg);color:#fff;
+    display:flex;flex-direction:column;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;padding:18px 16px;font-weight:700;font-size:16px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .brand .logo{
+    width:28px;height:28px;border-radius:6px;background:#fff;color:var(--sidebar-bg);
+    display:flex;align-items:center;justify-content:center;font-size:14px;
+  }
+  .tenant{padding:14px 16px 6px;font-size:15px;font-weight:700;color:#fff;}
+  .nav{flex:1;overflow-y:auto;padding:6px 0 20px;}
+  .nav-item{
+    display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:14px;
+    color:#cfd8ea;cursor:pointer;position:relative;
+  }
+  .nav-item .ic{width:16px;text-align:center;font-size:13px;opacity:.85;}
+  .nav-item.group{color:#fff;font-weight:600;}
+  .nav-item.child{padding-left:34px;font-size:13px;}
+  .nav-item.child.active{
+    background:var(--sidebar-active);color:#fff;font-weight:700;
+  }
+  .nav-item.child.active::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary);
+  }
+  .nav-item.child:hover{background:rgba(255,255,255,0.06);}
+  .nav-item.group .chevron{margin-left:auto;font-size:11px;transition:transform .2s;}
+  .nav-item.group.expanded .chevron{transform:rotate(180deg);}
+  .nav-children{overflow:hidden;}
+
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;}
+  .topbar{
+    height:60px;background:#fff;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;padding:0 20px;
+  }
+  .crumbs{color:#8993A4;font-size:14px;}
+  .crumbs b{color:var(--text);font-weight:600;}
+  .top-actions{display:flex;align-items:center;gap:12px;}
+  .pill-btn{
+    display:flex;align-items:center;gap:6px;border:1px solid var(--primary);color:var(--primary);
+    background:#EAF6FC;padding:7px 14px;border-radius:6px;font-size:13px;cursor:pointer;
+  }
+  .switch-wrap{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-sub);}
+  .switch{width:34px;height:18px;border-radius:10px;background:#D9DEE6;position:relative;}
+  .switch::after{content:"";position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:2px;left:2px;box-shadow:0 1px 2px rgba(0,0,0,.3);}
+  .avatar{
+    width:30px;height:30px;border-radius:50%;background:#EFA75C;display:flex;align-items:center;
+    justify-content:center;color:#fff;font-weight:700;font-size:13px;
+  }
+  .user-name{font-size:13px;color:var(--text);font-weight:600;}
+
+  .content{padding:18px 22px;flex:1;}
+  .page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px;}
+  .page-title{font-size:20px;font-weight:700;color:var(--text);}
+
+  .card{background:#fff;border-radius:8px;border:1px solid var(--border);padding:60px 20px;}
+  .placeholder{text-align:center;color:var(--text-sub);}
+  .placeholder .ic{font-size:40px;margin-bottom:12px;}
+  .placeholder .t{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;}
+  .placeholder .s{font-size:13px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="sidebar">
+    <div class="brand"><div class="logo">全</div>全電商</div>
+    <div class="tenant">咖啡飾品有限公司</div>
+    <div class="nav">
+      <div class="nav-item"><span class="ic">🔔</span>公告事項查詢</div>
+      <div class="nav-item group"><span class="ic">👤</span>供應商帳號與資料管理</div>
+      <div class="nav-item group" onclick="toggleNavGroup('grp-public-pm', this)"><span class="ic">📦</span>大眾版商品管理<span class="chevron">▾</span></div>
+      <div class="nav-children" id="grp-public-pm" style="display:none;">
+        <div class="nav-item child" onclick="location.href='商品批次提報.html'">商品批次提報</div>
+        <div class="nav-item child" onclick="location.href='商品單一提報.html'">商品單一提報</div>
+        <div class="nav-item child" onclick="location.href='草稿查詢與送審.html?from=batch'">草稿查詢及送審</div>
+        <div class="nav-item child">商品提報進度查詢</div>
+        <div class="nav-item child">商品內容查詢</div>
+        <div class="nav-item child">商品加減量申請</div>
+        <div class="nav-item child">商品加減量歷史紀錄</div>
+        <div class="nav-item child">商品上下架申請</div>
+        <div class="nav-item child">商品異動查詢</div>
+        <div class="nav-item child">商品異動申請</div>
+        <div class="nav-item child">歷史價格查詢</div>
+      </div>
+      <div class="nav-item group"><span class="ic">🏷️</span>申請全聯貨號</div>
+      <div class="nav-item child" onclick="location.href='批次申請全聯貨號.html'">批次申請全聯貨號</div>
+      <div class="nav-item child active" onclick="location.href='商品單一提報.html'">單一申請全聯貨號</div>
+      <div class="nav-item child" onclick="location.href='草稿查詢與送審.html?from=preorder'">草稿查詢與送審</div>
+      <div class="nav-item child">貨號申請進度</div>
+      <div class="nav-item group"><span class="ic">🛍️</span>全聯預購商品</div>
+      <div class="nav-item child">商品查詢與修改</div>
+      <div class="nav-item child">商品欄位批次修改</div>
+      <div class="nav-item child">商品加減量</div>
+      <div class="nav-item child">商品上下架</div>
+      <div class="nav-item child">商品異動申請進度</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="crumbs">首頁 / 申請全聯貨號 / <b>商品單一提報</b></div>
+      <div class="top-actions">
+        <div class="switch-wrap"><div class="switch"></div>一般模式</div>
+        <div class="avatar">C</div>
+        <div class="user-name">Chimoon</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-head">
+        <div class="page-title">商品單一提報</div>
+      </div>
+
+      <div class="card">
+        <div class="placeholder">
+          <div class="ic">🚧</div>
+          <div class="t">此頁面尚在規劃中</div>
+          <div class="s">商品單一提報功能即將推出，敬請期待</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function toggleNavGroup(id, headerEl){
+  var el = document.getElementById(id);
+  var isOpen = el.style.display !== 'none';
+  el.style.display = isOpen ? 'none' : 'block';
+  headerEl.classList.toggle('expanded', !isOpen);
+}
+</script>
+</body>
+</html>

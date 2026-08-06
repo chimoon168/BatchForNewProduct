@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>查詢結果 - 下載標籤編輯檔｜批次申請全聯貨號</title>
+<style>
+  :root{
+    --primary:#169BD5;--primary-dark:#0F7FB0;--pink:#DF0870;
+    --text:#333333;--text-sub:#999999;--border:#E3E6EB;--bg:#F4F6F9;
+    --green:#2E9E5B;--orange:#E8912D;--red:#D0362C;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;color:var(--text);background:var(--bg);}
+  .topbar{
+    height:56px;background:#1B2A4A;color:#fff;display:flex;align-items:center;justify-content:space-between;
+    padding:0 20px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;}
+  .brand .logo{width:26px;height:26px;border-radius:6px;background:#fff;color:#1B2A4A;display:flex;align-items:center;justify-content:center;font-size:13px;}
+  .top-actions{display:flex;gap:10px;}
+  .top-actions button{
+    border:1px solid rgba(255,255,255,0.5);color:#fff;background:transparent;padding:6px 14px;
+    border-radius:6px;font-size:13px;cursor:pointer;
+  }
+  .top-actions button:hover{background:rgba(255,255,255,0.12);}
+  .content{padding:20px 26px;}
+  .page-title{font-size:19px;font-weight:700;margin-bottom:4px;}
+  .breadcrumb{font-size:13px;color:var(--text-sub);margin-bottom:16px;}
+  .card{background:#fff;border-radius:8px;border:1px solid var(--border);padding:18px 20px;}
+  .result-count{font-size:13px;color:var(--text-sub);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+  .result-count b{color:var(--text);}
+  .check-legend{font-size:12px;color:var(--text-sub);margin-top:4px;}
+  .toolbar-v2{margin-bottom:10px;}
+  .btn-row-left{display:flex;gap:10px;margin-bottom:8px;}
+  .primary-btn{background:var(--primary);color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:14px;font-weight:700;cursor:pointer;}
+  .ghost-btn{background:#fff;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 14px;font-size:14px;cursor:pointer;}
+  .ghost-btn:disabled{opacity:.45;cursor:not-allowed;}
+  .ghost-btn.is-disabled{opacity:.45;cursor:not-allowed;pointer-events:none;}
+
+  .table-scroll{overflow-x:auto;overflow-y:hidden;border:1px solid var(--border);border-radius:6px;padding-bottom:2px;}
+  .table-scroll::-webkit-scrollbar{height:10px;}
+  .table-scroll::-webkit-scrollbar-track{background:#F4F6F9;}
+  .table-scroll::-webkit-scrollbar-thumb{background:#C6CEDA;border-radius:5px;}
+  .table-scroll::-webkit-scrollbar-thumb:hover{background:#AEB9C8;}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:1080px;}
+  thead th{background:#F4F6F9;color:#7A8496;font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);white-space:nowrap;}
+  tbody td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--text);white-space:nowrap;}
+  tbody tr:hover{background:#FAFBFD;}
+
+  .cell-link{font-size:12.5px;font-weight:700;cursor:pointer;}
+  .cell-link.pass{color:var(--green);}
+  .cell-link.edit{color:var(--pink);text-decoration:underline;}
+  .small-btn{border:1px solid var(--border);background:#fff;color:var(--text);border-radius:5px;padding:4px 8px;font-size:12px;cursor:pointer;}
+  .small-btn.red{border-color:var(--red);color:var(--red);}
+
+  .pagination-row{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:13px;color:var(--text-sub);}
+  .page-size-select{display:flex;align-items:center;gap:6px;}
+  .page-size-select select{padding:5px 8px;border:1px solid var(--border);border-radius:6px;}
+  .pg-group{display:flex;align-items:center;gap:6px;}
+  .pg{width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);cursor:pointer;}
+  .pg.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:none;align-items:center;justify-content:center;z-index:1000;}
+  .modal-box{background:#fff;border-radius:10px;padding:24px 28px;min-width:320px;max-width:90vw;box-shadow:0 8px 30px rgba(0,0,0,0.2);}
+  .modal-text{font-size:15px;color:var(--text);margin-bottom:20px;line-height:1.6;}
+  .modal-actions{display:flex;justify-content:flex-end;gap:10px;}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand"><div class="logo">全</div>全電商 - 查詢結果視窗</div>
+    <div class="top-actions">
+      <button onclick="window.print()">🖨 列印</button>
+      <button onclick="window.close()">✕ 關閉視窗</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="breadcrumb">首頁 / 申請全聯貨號 / 批次申請全聯貨號 / 查詢結果（另開頁面）</div>
+    <div class="page-title">查詢結果 - 下載標籤編輯檔</div>
+    <div class="card">
+      <div class="result-count" style="justify-content:flex-start;">
+        <span>查詢結果（共 <b>20</b> 筆）</span>
+        <div class="check-legend" style="margin-top:0;">「通過」= 標籤已檢測合格　「編輯」= 尚未通過，需點擊修正並勾選後下載標籤編輯檔</div>
+      </div>
+      <div class="toolbar-v2">
+        <div class="btn-row-left" style="margin-bottom:0;">
+          <button id="resultDownloadBtn" class="primary-btn" disabled>⬇ 下載標籤編輯檔</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th><input type="checkbox" onclick="document.querySelectorAll('.dl-check').forEach(function(cb){cb.checked=this.checked;}.bind(this))" title="全選下載"></th><th>No</th><th>標籤</th><th>標籤母表</th><th>草稿編號</th><th>商品名稱</th>
+              <th>規格型號</th><th>品牌</th><th>全聯分類</th><th>標籤建立日期</th><th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr>
+                <td></td><td>1</td><td><span class="cell-link pass">通過</span></td><td>飾品</td><td>100032</td><td>韓系925純銀鑲嵌天然淡水珍珠耳針女神氣質百搭抗過敏耳環送禮首選推薦</td>
+                <td>ER-PL925-01</td><td>Lumi Silver</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-08-01</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="dl-check"></td><td>2</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100033</td><td>復古典雅水滴造型項鍊女士鎖骨鍊氣質百搭日常穿搭時尚飾品送禮首選推薦</td>
+                <td>NK-VT-02</td><td>咖咖飾品自有品牌</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-08-01</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked class="dl-check"></td><td>3</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100034</td><td>簡約幾何線條造型手鍊女士合金材質百搭手飾日常上班穿搭配件送禮推薦款</td>
+                <td>BR-GEO-03</td><td>木子物件</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-30</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td></td><td>4</td><td><span class="cell-link pass">通過</span></td><td>飾品</td><td>100035</td><td>極簡風格開口戒指三件組合925純銀材質女士食指戒尾戒疊戴百搭送禮推薦款</td>
+                <td>RG-SET-04</td><td>咖咖飾品自有品牌</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-29</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked class="dl-check"></td><td>5</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100036</td><td>法式復古珍珠水滴耳環925銀針女士氣質百搭日常上班約會穿搭送禮款</td>
+                <td>ER-DR-05</td><td>微光珠寶</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-28</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="dl-check"></td><td>6</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100037</td><td>極簡C字項鍊女士鎖骨鍊316不鏽鋼材質防過敏百搭日常穿搭送禮推薦</td>
+                <td>NK-CH-06</td><td>悅己銀飾</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-27</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td></td><td>7</td><td><span class="cell-link pass">通過</span></td><td>飾品</td><td>100038</td><td>韓系氣質珍珠手鍊女士單圈設計百搭日常上班約會穿搭飾品送禮首選</td>
+                <td>BR-PL-07</td><td>Lumi Silver</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-26</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="dl-check"></td><td>8</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100039</td><td>極簡雙層戒指女士925純銀材質食指戒疊戴百搭日常穿搭送禮推薦款式</td>
+                <td>RG-MIN-08</td><td>銀飾坊</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-25</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked class="dl-check"></td><td>9</td><td><span class="cell-link edit">編輯</span></td><td>髮飾</td><td>100040</td><td>法式復古玳瑁髮箍女士寬版顯瘦百搭日常上班約會穿搭配件送禮推薦</td>
+                <td>HR-CL-09</td><td>潮流飾品苑</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;髮飾&gt;髮束</td><td>2026-07-24</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td></td><td>10</td><td><span class="cell-link pass">通過</span></td><td>飾品</td><td>100041</td><td>極簡幾何愛心耳環女士925銀針百搭日常上班約會穿搭飾品送禮推薦款</td>
+                <td>ER-HP-10</td><td>木子物件</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-23</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked class="dl-check"></td><td>11</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100042</td><td>復古方形吊墜項鍊女士316不鏽鋼防過敏百搭日常穿搭配件送禮首選</td>
+                <td>NK-PD-11</td><td>咖咖飾品自有品牌</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-22</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="dl-check"></td><td>12</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100043</td><td>極簡鎖鏈手鍊女士925純銀材質單圈設計百搭日常上班穿搭送禮推薦款</td>
+                <td>BR-CH-12</td><td>悅己銀飾</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-21</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td></td><td>13</td><td><span class="cell-link pass">通過</span></td><td>飾品</td><td>100044</td><td>韓系氣質珍珠戒指女士開口式設計百搭日常上班約會穿搭飾品送禮款</td>
+                <td>RG-PR-13</td><td>微光珠寶</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-20</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="dl-check"></td><td>14</td><td><span class="cell-link edit">編輯</span></td><td>髮飾</td><td>100045</td><td>法式蝴蝶結髮夾女士邊夾造型百搭日常上班約會穿搭配件送禮推薦款</td>
+                <td>HR-BD-14</td><td>潮流飾品苑</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;髮飾&gt;邊夾</td><td>2026-07-19</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked class="dl-check"></td><td>15</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100046</td><td>極簡幾何方形耳環女士925銀針防過敏百搭日常上班約會穿搭送禮款式</td>
+                <td>ER-ST-15</td><td>銀飾坊</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-18</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td></td><td>16</td><td><span class="cell-link pass">通過</span></td><td>飾品</td><td>100047</td><td>韓系氣質羽毛項鍊女士316不鏽鋼材質百搭日常上班穿搭配件送禮首選</td>
+                <td>NK-LY-16</td><td>Lumi Silver</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-17</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked class="dl-check"></td><td>17</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100048</td><td>極簡疊層手鍊組女士合金材質三入組百搭日常上班約會穿搭送禮推薦</td>
+                <td>BR-ST-17</td><td>木子物件</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-16</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="dl-check"></td><td>18</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100049</td><td>雙環交叉造型戒指女士925純銀材質食指戒百搭日常穿搭送禮推薦款式</td>
+                <td>RG-DB-18</td><td>咖咖飾品自有品牌</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-15</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td></td><td>19</td><td><span class="cell-link pass">通過</span></td><td>髮飾</td><td>100050</td><td>法式碎花髮束女士鬆緊綁髮圈百搭日常上班約會穿搭配件送禮推薦款</td>
+                <td>HR-SC-19</td><td>悅己銀飾</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;髮飾&gt;髮束</td><td>2026-07-14</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="dl-check"></td><td>20</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100051</td><td>極簡水鑽耳環女士925銀針閃耀氣質百搭日常上班約會穿搭送禮首選款</td>
+                <td>ER-CR-20</td><td>微光珠寶</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-13</td>
+                <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination-row">
+        <div class="page-size-select">每頁顯示
+          <select><option selected>20</option><option>50</option><option>100</option><option>500</option></select>
+          筆　共 20 筆
+        </div>
+        <div class="pg-group"><div class="pg active">1</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal-box">
+      <div class="modal-text" id="deleteModalText">確認刪除？</div>
+      <div class="modal-actions">
+        <button class="ghost-btn" onclick="closeDeleteModal()">返回</button>
+        <button class="primary-btn" style="background:var(--red);" onclick="confirmDeleteAction()">送出</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  function refreshBulkDeleteBtn(scope, btnId, checkClass){
+    checkClass = checkClass || 'del-check';
+    var checks = document.querySelectorAll((scope ? scope + ' ' : '') + '.' + checkClass);
+    var any = Array.prototype.some.call(checks, function(cb){ return cb.checked; });
+    var btn = document.getElementById(btnId);
+    if (!btn) return;
+    if (btn.tagName === 'BUTTON') btn.disabled = !any;
+    btn.classList.toggle('is-disabled', !any);
+  }
+  var _bulkDeleteBtns = [
+    { scope: '', id: 'resultDownloadBtn', checkClass: 'dl-check' }
+  ];
+  document.addEventListener('change', function(e){
+    if (e.target && e.target.matches('input[type=checkbox]')) {
+      _bulkDeleteBtns.forEach(function(cfg){ refreshBulkDeleteBtn(cfg.scope, cfg.id, cfg.checkClass); });
+    }
+  });
+  _bulkDeleteBtns.forEach(function(cfg){ refreshBulkDeleteBtn(cfg.scope, cfg.id, cfg.checkClass); });
+  var _pendingDeleteAction = null;
+  function showDeleteConfirm(type, count, onConfirm){
+    var msg = type === 'full'
+      ? ('確認商品主檔+銷售顯示+標籤 全數刪除共' + count + '筆?')
+      : ('確認刪除商品標籤共' + count + '筆?');
+    document.getElementById('deleteModalText').textContent = msg;
+    _pendingDeleteAction = onConfirm;
+    document.getElementById('deleteModal').style.display = 'flex';
+  }
+  function closeDeleteModal(){
+    document.getElementById('deleteModal').style.display = 'none';
+    _pendingDeleteAction = null;
+  }
+  function confirmDeleteAction(){
+    if (typeof _pendingDeleteAction === 'function') { _pendingDeleteAction(); }
+    closeDeleteModal();
+  }
+  </script>
+</body>
+</html>
