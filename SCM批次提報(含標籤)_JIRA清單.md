@@ -51,9 +51,6 @@
 </tbody>
 </table>
 
-> [!NOTE]
-> Jira 編號 ECB2E-10127、ECB2E-10129 未使用，並非本專案遺漏項目。
-
 ### 1.3 前端子任務（14 張）
 
 | 代號 | Jira Key | Ticket 名稱 | 狀態 |
