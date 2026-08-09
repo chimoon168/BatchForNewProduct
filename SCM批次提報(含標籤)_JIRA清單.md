@@ -29,7 +29,7 @@
 
 | 代號 | Jira Key | Ticket 名稱 | 狀態 |
 | --- | --- | --- | --- |
-| DB00 | [ECB2E-10117](https://pxec.atlassian.net/browse/ECB2E-10117) | SCM > 批次 > DB00：新增草稿欄位（標籤方式 `TagGenerateType`、複製標籤 `TagCopyFrom`）（DB） | 待辦事項 |
+| DB00 |<div style="white-space: nowrap;"> [ECB2E-10117](https://pxec.atlassian.net/browse/ECB2E-10117) | SCM > 批次 > DB00：新增草稿欄位（標籤方式 `TagGenerateType`、複製標籤 `TagCopyFrom`）（DB） </div>| <div style="white-space: nowrap;">待辦事項 </div>|
 | B01 | [ECB2E-10118](https://pxec.atlassian.net/browse/ECB2E-10118) | SCM > 批次 > B01：產生批次申請貨號 Excel（新品提報／預購） | 待辦事項 |
 | B02 | [ECB2E-10119](https://pxec.atlassian.net/browse/ECB2E-10119) | SCM > 批次 > B02：檢核上傳的批次申請貨號 Excel（新品提報／預購） | 待辦事項 |
 | B03 | [ECB2E-10120](https://pxec.atlassian.net/browse/ECB2E-10120) | SCM > 批次 > B03：批次產生新品草稿（含小幫手與複製標籤）（新品提報／預購） | 待辦事項 |
