@@ -51,6 +51,7 @@
   .cell-link{font-size:12.5px;font-weight:700;cursor:pointer;}
   .cell-link.pass{color:var(--green);}
   .cell-link.edit{color:var(--pink);text-decoration:underline;}
+  .cell-link.unfilled{color:var(--orange);}
   .small-btn{border:1px solid var(--border);background:#fff;color:var(--text);border-radius:5px;padding:4px 8px;font-size:12px;cursor:pointer;}
   .small-btn.red{border-color:var(--red);color:var(--red);}
 
@@ -80,7 +81,7 @@
     <div class="card">
       <div class="result-count" style="justify-content:flex-start;">
         <span>查詢結果（共 <b>20</b> 筆）</span>
-        <div class="check-legend" style="margin-top:0;">「通過」= 標籤已檢測合格　「編輯」= 尚未通過，需點擊修正並勾選後下載標籤編輯檔</div>
+        <div class="check-legend" style="margin-top:0;">「通過」= 標籤已檢測合格　「編輯」= 尚未通過，需點擊修正並勾選後下載標籤編輯檔　「未填」= 尚未建立標籤</div>
       </div>
       <div class="toolbar-v2">
         <div class="btn-row-left" style="margin-bottom:0;">
@@ -122,7 +123,7 @@
                 <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
               </tr>
               <tr>
-                <td><input type="checkbox" class="dl-check"></td><td>6</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100046</td><td>競品比價專用手鍊組合金材質女士疊戴百搭日常上班穿搭飾品比對測試</td>
+                <td><input type="checkbox" class="dl-check"></td><td>6</td><td><span class="cell-link unfilled">未填</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100046</td><td>競品比價專用手鍊組合金材質女士疊戴百搭日常上班穿搭飾品比對測試</td>
                 <td>BR-CMP-09</td><td>其他品牌B</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-28</td>
                 <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
               </tr>
@@ -152,7 +153,7 @@
                 <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
               </tr>
               <tr>
-                <td><input type="checkbox" class="dl-check"></td><td>12</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100052</td><td>簡約百搭項鍊三入組不鏽鋼材質女士鎖骨鍊日常上班約會穿搭時尚配件</td>
+                <td><input type="checkbox" class="dl-check"></td><td>12</td><td><span class="cell-link unfilled">未填</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100052</td><td>簡約百搭項鍊三入組不鏽鋼材質女士鎖骨鍊日常上班約會穿搭時尚配件</td>
                 <td>NK-SET-17</td><td>咖咖飾品自有品牌</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-22</td>
                 <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
               </tr>
@@ -182,7 +183,7 @@
                 <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
               </tr>
               <tr>
-                <td><input type="checkbox" class="dl-check"></td><td>18</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100058</td><td>競品比價專用鎖鏈手鍊組合金材質女士疊戴百搭日常穿搭比對測試款式</td>
+                <td><input type="checkbox" class="dl-check"></td><td>18</td><td><span class="cell-link unfilled">未填</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100058</td><td>競品比價專用鎖鏈手鍊組合金材質女士疊戴百搭日常穿搭比對測試款式</td>
                 <td>BR-CMP-23</td><td>其他品牌B</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-16</td>
                 <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
               </tr>

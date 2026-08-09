@@ -45,8 +45,10 @@
   .nav{flex:1;overflow-y:auto;padding:6px 0 20px;}
   .nav-item{
     display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:14px;
-    color:#cfd8ea;cursor:pointer;position:relative;
+    color:#cfd8ea;cursor:pointer;position:relative;user-select:none;
   }
+  .nav-item:hover{background:rgba(255,255,255,0.06);color:#fff;}
+  .nav-item:focus-visible{outline:2px solid var(--primary);outline-offset:-2px;}
   .nav-item .ic{width:16px;text-align:center;font-size:13px;opacity:.85;}
   .nav-item.group{color:#fff;font-weight:600;}
   .nav-item.child{padding-left:34px;font-size:13px;}
@@ -57,9 +59,10 @@
     content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary);
   }
   .nav-item.child:hover{background:rgba(255,255,255,0.06);}
-  .nav-item.group .chevron{margin-left:auto;font-size:11px;transition:transform .2s;}
-  .nav-item.group.expanded .chevron{transform:rotate(180deg);}
-  .nav-children{overflow:hidden;}
+  .nav-item.group .chevron{margin-left:auto;font-size:11px;line-height:1;transition:transform .25s ease;transform:rotate(-90deg);transform-origin:center;}
+  .nav-item.group.expanded .chevron{transform:rotate(0deg);}
+  .nav-children{max-height:0;overflow:hidden;opacity:0;transition:max-height .3s ease,opacity .2s ease;}
+  .nav-children.expanded{opacity:1;}
 
   /* Main */
   .main{flex:1;display:flex;flex-direction:column;min-width:0;}
@@ -248,6 +251,7 @@
   .cell-link.pass{color:var(--green);}
   .cell-link.pass:hover{text-decoration:underline;}
   .cell-link.edit{color:var(--pink);text-decoration:underline;}
+  .cell-link.unfilled{color:var(--orange);}
 
   textarea{
     border:1px solid var(--border);border-radius:6px;padding:6px 9px;font-size:13px;color:var(--text);
@@ -279,27 +283,35 @@
   <div class="sidebar">
     <div class="brand" style="cursor:pointer;" onclick="location.href='index.html'"><div class="logo">全</div>全電商</div>
     <div class="tenant">咖啡飾品有限公司</div>
-    <div class="nav">
-      <div class="nav-item"><span class="ic">🔔</span>公告事項查詢</div>
-      <div class="nav-item group"><span class="ic">👤</span>供應商帳號與資料管理</div>
-      <div class="nav-item group"><span class="ic">🏷️</span>申請全聯貨號</div>
-      <div class="nav-item child active" onclick="location.href='批次申請全聯貨號.html'">批次申請全聯貨號</div>
-      <div class="nav-item child" onclick="location.href='商品單一提報.html'">單一申請全聯貨號</div>
-      <div class="nav-item child" onclick="location.href='草稿查詢與送審.html?from=preorder'">草稿查詢與送審</div>
-      <div class="nav-item child">貨號申請進度</div>
-      <div class="nav-item group"><span class="ic">🛍️</span>全聯預購商品</div>
-      <div class="nav-item child">商品查詢與修改</div>
-      <div class="nav-item child">商品欄位批次修改</div>
-      <div class="nav-item child">商品加減量</div>
-      <div class="nav-item child">商品上下架</div>
-      <div class="nav-item child">商品異動申請進度</div>
+    <div class="nav" id="sidebarNav">
+      <div class="nav-item" data-page="公告事項查詢.html" data-label="公告事項查詢" tabindex="0"><span class="ic">🔔</span>公告事項查詢</div>
+      <div class="nav-item" data-page="供應商帳號與資料管理.html" data-label="供應商帳號與資料管理" tabindex="0"><span class="ic">👤</span>供應商帳號與資料管理</div>
+      <div class="nav-section" data-section="申請全聯貨號">
+        <div class="nav-item group" role="button" tabindex="0" aria-expanded="false"><span class="ic">🏷️</span><span>申請全聯貨號</span><span class="chevron">⌄</span></div>
+        <div class="nav-children">
+          <div class="nav-item child" data-page="批次申請全聯貨號.html" data-label="批次申請全聯貨號" tabindex="0">批次申請全聯貨號</div>
+          <div class="nav-item child" data-page="商品單一提報.html" data-label="單一申請全聯貨號" tabindex="0">單一申請全聯貨號</div>
+          <div class="nav-item child" data-page="草稿查詢與送審.html" data-label="草稿查詢與送審" tabindex="0">草稿查詢與送審</div>
+          <div class="nav-item child" data-page="貨號申請進度.html" data-label="貨號申請進度" tabindex="0">貨號申請進度</div>
+        </div>
+      </div>
+      <div class="nav-section" data-section="全聯預購商品">
+        <div class="nav-item group" role="button" tabindex="0" aria-expanded="false"><span class="ic">🛍️</span><span>全聯預購商品</span><span class="chevron">⌄</span></div>
+        <div class="nav-children">
+          <div class="nav-item child" data-page="商品查詢與修改.html" data-label="商品查詢與修改" tabindex="0">商品查詢與修改</div>
+          <div class="nav-item child" data-page="商品欄位批次修改.html" data-label="商品欄位批次修改" tabindex="0">商品欄位批次修改</div>
+          <div class="nav-item child" data-page="商品加減量.html" data-label="商品加減量" tabindex="0">商品加減量</div>
+          <div class="nav-item child" data-page="商品上下架.html" data-label="商品上下架" tabindex="0">商品上下架</div>
+          <div class="nav-item child" data-page="商品異動申請進度.html" data-label="商品異動申請進度" tabindex="0">商品異動申請進度</div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- Main -->
   <div class="main">
     <div class="topbar">
-      <div class="crumbs">首頁 / 申請全聯貨號 / <b>批次申請全聯貨號</b></div>
+      <div class="crumbs" id="pageCrumbs">首頁 / 申請全聯貨號 / <b>批次申請全聯貨號</b></div>
       <div class="top-actions">
         <div class="pill-btn">⬆ 上傳紀錄結果</div>
         <div class="pill-btn">⬇ 下載紀錄結果</div>
@@ -319,13 +331,13 @@
       </div>
 
       <div class="card">
-        <!-- 4 step tabs -->
+        <!-- 可由 ?view=0～4 指定呈現區塊 -->
         <div class="step-tabs">
-          <div class="step-tab active" onclick="showStep(1,this)"><span class="num">1</span>下載商品範本</div>
-          <div class="step-tab" onclick="showStep(2,this)"><span class="num">2</span>上傳商品檔</div>
-          <div class="step-tab" onclick="showStep(3,this)"><span class="num">3</span>下載標籤編輯檔</div>
-          <div class="step-tab" onclick="showStep(4,this)"><span class="num">4</span>上傳標籤檔</div>
-          <div class="step-tab" onclick="location.href='草稿查詢與送審.html?from=preorder'"><span class="num">5</span>草稿查詢與送審</div>
+          <div class="step-tab active" data-view="1" data-panel="panel-1" tabindex="0"><span class="num">1</span>下載商品範本</div>
+          <div class="step-tab" data-view="2" data-panel="panel-2" tabindex="0"><span class="num">2</span>上傳商品檔</div>
+          <div class="step-tab" data-view="3" data-panel="panel-3" tabindex="0"><span class="num">3</span>下載標籤編輯檔</div>
+          <div class="step-tab" data-view="4" data-panel="panel-4" tabindex="0"><span class="num">4</span>上傳標籤檔</div>
+          <div class="step-tab" data-view="5" data-page="草稿查詢與送審.html" tabindex="0"><span class="num">5</span>草稿查詢與送審</div>
         </div>
 
         <!-- STEP 1 -->
@@ -534,7 +546,7 @@
                 <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
               </tr>
               <tr>
-                <td><input type="checkbox" class="dl-check"></td><td>6</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100037</td><td>極簡C字項鍊女士鎖骨鍊316不鏽鋼材質防過敏百搭日常穿搭送禮推薦</td>
+                <td><input type="checkbox" class="dl-check"></td><td>6</td><td><span class="cell-link unfilled">未填</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100037</td><td>極簡C字項鍊女士鎖骨鍊316不鏽鋼材質防過敏百搭日常穿搭送禮推薦</td>
                 <td>NK-CH-06</td><td>悅己銀飾</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-27</td>
                 <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
               </tr>
@@ -564,7 +576,7 @@
                 <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
               </tr>
               <tr>
-                <td><input type="checkbox" class="dl-check"></td><td>12</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100043</td><td>極簡鎖鏈手鍊女士925純銀材質單圈設計百搭日常上班穿搭送禮推薦款</td>
+                <td><input type="checkbox" class="dl-check"></td><td>12</td><td><span class="cell-link unfilled">未填</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100043</td><td>極簡鎖鏈手鍊女士925純銀材質單圈設計百搭日常上班穿搭送禮推薦款</td>
                 <td>BR-CH-12</td><td>悅己銀飾</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-21</td>
                 <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
               </tr>
@@ -594,7 +606,7 @@
                 <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
               </tr>
               <tr>
-                <td><input type="checkbox" class="dl-check"></td><td>18</td><td><span class="cell-link edit">編輯</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100049</td><td>雙環交叉造型戒指女士925純銀材質食指戒百搭日常穿搭送禮推薦款式</td>
+                <td><input type="checkbox" class="dl-check"></td><td>18</td><td><span class="cell-link unfilled">未填</span></td><td><select style="padding:2px 4px;font-size:12px;"><option selected>飾品</option><option>包包</option></select></td><td>100049</td><td>雙環交叉造型戒指女士925純銀材質食指戒百搭日常穿搭送禮推薦款式</td>
                 <td>RG-DB-18</td><td>咖咖飾品自有品牌</td><td>服飾配件/鞋包&gt;流行飾品/包類/傘類&gt;金飾/珠寶&gt;金/銀飾類</td><td>2026-07-15</td>
                 <td><span class="small-btn red" onclick="showDeleteConfirm('label',1,function(row){row.remove();}.bind(null,this.closest('tr')))">刪除</span></td>
               </tr>
@@ -705,12 +717,55 @@ document.addEventListener('change', function(e){
   }
 });
 _bulkDeleteBtns.forEach(function(cfg){ refreshBulkDeleteBtn(cfg.scope, cfg.id, cfg.checkClass); });
-function toggleNavGroup(id, headerEl){
-  var el = document.getElementById(id);
-  var isOpen = el.style.display !== 'none';
-  el.style.display = isOpen ? 'none' : 'block';
-  headerEl.classList.toggle('expanded', !isOpen);
-}
+(function initSidebar(){
+  var nav = document.getElementById('sidebarNav');
+  if (!nav) return;
+  function setSection(section, open){
+    var header = section.querySelector('.nav-item.group');
+    var children = section.querySelector('.nav-children');
+    header.classList.toggle('expanded', open);
+    header.setAttribute('aria-expanded', String(open));
+    children.classList.toggle('expanded', open);
+    children.style.maxHeight = open ? children.scrollHeight + 'px' : '0px';
+  }
+  function toggleSection(section){
+    var willOpen = section.querySelector('.nav-item.group').getAttribute('aria-expanded') !== 'true';
+    nav.querySelectorAll('.nav-section').forEach(function(other){ setSection(other, other === section && willOpen); });
+  }
+  nav.querySelectorAll('.nav-section').forEach(function(section){
+    var header = section.querySelector('.nav-item.group');
+    header.addEventListener('click', function(){ toggleSection(section); });
+    header.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSection(section); }
+    });
+  });
+  var currentPage;
+  try { currentPage = decodeURIComponent(location.pathname.split('/').pop() || '批次申請全聯貨號.html'); }
+  catch (e) { currentPage = location.pathname.split('/').pop() || '批次申請全聯貨號.html'; }
+  var items = Array.prototype.slice.call(nav.querySelectorAll('[data-page]'));
+  var activeItem = items.find(function(item){ return item.dataset.page === currentPage; });
+  items.forEach(function(item){
+    item.classList.toggle('active', item === activeItem);
+    function go(){ if (item !== activeItem) location.href = item.dataset.page; }
+    item.addEventListener('click', go);
+    item.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+  });
+  nav.querySelectorAll('.nav-section').forEach(function(section){ setSection(section, !!activeItem && section.contains(activeItem)); });
+  var crumbs = document.getElementById('pageCrumbs');
+  if (crumbs && activeItem) {
+    var section = activeItem.closest('.nav-section');
+    crumbs.textContent = '';
+    crumbs.append(document.createTextNode('首頁 / '));
+    if (section) crumbs.append(document.createTextNode(section.dataset.section + ' / '));
+    var current = document.createElement('b');
+    current.textContent = activeItem.dataset.label || activeItem.textContent.trim();
+    crumbs.appendChild(current);
+  }
+  window.addEventListener('resize', function(){
+    var openChildren = nav.querySelector('.nav-children.expanded');
+    if (openChildren) openChildren.style.maxHeight = openChildren.scrollHeight + 'px';
+  });
+})();
 function setTemplateDownloadName(el){
   var supplierCode = '0123';
   function pad(n){ return (n<10?'0':'')+n; }
@@ -746,6 +801,38 @@ function showStep(n, el){
   el.classList.add('active');
   document.getElementById('panel-'+n).classList.add('active');
 }
+(function initViewRouting(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.step-tab[data-view]'));
+  function openTab(tab, updateUrl){
+    var view = tab.dataset.view;
+    if (tab.dataset.page) {
+      var target = tab.dataset.page;
+      var sep = target.indexOf('?') === -1 ? '?' : '&';
+      location.href = target + sep + 'view=' + encodeURIComponent(view);
+      return;
+    }
+    showStep(view, tab);
+    if (updateUrl && history.replaceState) {
+      var url = new URL(location.href);
+      url.searchParams.set('view', view);
+      history.replaceState(null, '', url.pathname + url.search + url.hash);
+    }
+  }
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){ openTab(tab, true); });
+    tab.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openTab(tab, true); }
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        var offset = e.key === 'ArrowRight' ? 1 : -1;
+        tabs[(tabs.indexOf(tab) + offset + tabs.length) % tabs.length].focus();
+      }
+    });
+  });
+  var requested = new URLSearchParams(location.search).get('view') || '1';
+  var target = tabs.find(function(tab){ return tab.dataset.view === requested; }) || tabs.find(function(tab){ return tab.dataset.view === '1'; });
+  openTab(target, false);
+})();
 </script>
 </body>
 </html>
