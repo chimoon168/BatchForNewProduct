@@ -1,4 +1,4 @@
-# SCM 預購/轉單標籤化改版 — 系統分析（依開發單）
+# SCM 預購/轉單批次提報(含標籤) — 系統分析（依開發單）
 
 對應 Jira 主單：[ECB2E-9967](https://pxec.atlassian.net/browse/ECB2E-9967)「SCM>預購>批次申請全聯貨號(UIUX重構)」
 本文件依 30 張子任務（DB00、B01~B15、F01~F14）逐一說明開發重點；前端票券並針對其對應畫面的「查詢條件」與「查詢結果」欄位，以表格逐一說明顯示/互動邏輯。畫面依據為目前已完成之線框稿（`批次申請全聯貨號.html`、`商品批次提報.html`、`草稿查詢與送審.html`、4 個 `查詢結果_*.html` 彈窗）。
@@ -7,7 +7,7 @@
 
 ## 一、後端／DB 開發單（16 張）
 
-### DB00｜[ECB2E-10117](https://pxec.atlassian.net/browse/ECB2E-10117)｜新增草稿欄位(標籤方式TagGenerateType、複製標籤TagCopyFrom)(DB)
+### DB00｜[ECB2E-10117](https://pxec.atlassian.net/browse/ECB2E-10117)｜SCM>批次>DB00_新增草稿欄位(標籤方式TagGenerateType、複製標籤TagCopyFrom)(DB)
 
 開發重點：
 - 草稿資料表新增兩欄位：`TagGenerateType`（標籤建立方式：自行填寫／AI小幫手／複製標籤）、`TagCopyFrom`（複製標籤時記錄來源草稿編號）。
@@ -16,7 +16,7 @@
 
 無對應前端查詢畫面欄位（純 DB schema 異動）。
 
-### B01｜[ECB2E-10118](https://pxec.atlassian.net/browse/ECB2E-10118)｜產生批次申請貨號EXCEL(新品提報)(預購)
+### B01｜[ECB2E-10118](https://pxec.atlassian.net/browse/ECB2E-10118)｜SCM>批次>B01_產生批次申請貨號EXCEL(新品提報)(預購)
 
 開發重點：
 - 依 F03 畫面「全聯分類（四層）＋品牌」已選結果，產生批次商品範本 EXCEL（對應按鈕「產生批次商品範本 EXCEL」）。
@@ -24,14 +24,14 @@
 
 畫面欄位邏輯：見下方「F03」選擇條件表。
 
-### B02｜[ECB2E-10119](https://pxec.atlassian.net/browse/ECB2E-10119)｜檢核上傳的批次申請貨號EXCEL(新品提報)(預購)
+### B02｜[ECB2E-10119](https://pxec.atlassian.net/browse/ECB2E-10119)｜SCM>批次>B02_檢核上傳的批次申請貨號EXCEL(新品提報)(預購)
 
 開發重點：
 - 檢核 F04（Step2 上傳商品檔）上傳之範本 EXCEL 是否符合 B01 產出格式，回傳結果供「上傳紀錄」表格三態顯示。
 
 畫面欄位邏輯：見下方「F04」上傳紀錄表。
 
-### B03｜[ECB2E-10120](https://pxec.atlassian.net/browse/ECB2E-10120)｜批次產生新品草稿(含小幫手和複製標籤)(新品提報)(預購)
+### B03｜[ECB2E-10120](https://pxec.atlassian.net/browse/ECB2E-10120)｜SCM>批次>B03_批次產生新品草稿(含小幫手和複製標籤)(新品提報)(預購)
 
 開發重點：
 - 驗證通過後批次建立新品草稿，需判斷「自行填寫／AI小幫手／複製標籤」三種標籤建立方式並寫入 DB00 欄位。
@@ -39,7 +39,7 @@
 
 畫面欄位邏輯：無獨立查詢畫面；邏輯反映在 F05 查詢結果「標籤母表」欄位的預設值判斷上。
 
-### B04｜[ECB2E-10121](https://pxec.atlassian.net/browse/ECB2E-10121)｜產生批次標籤填寫的EXCEL(新增標籤)(預購)
+### B04｜[ECB2E-10121](https://pxec.atlassian.net/browse/ECB2E-10121)｜SCM>批次>B04_產生批次標籤填寫的EXCEL(新增標籤)(預購)
 
 開發重點：
 - 對應 F05 畫面「⬇ 下載標籤編輯檔」動作，產生批次標籤填寫 EXCEL。
@@ -47,14 +47,14 @@
 
 畫面欄位邏輯：見下方「F05」查詢結果表。
 
-### B05｜[ECB2E-10122](https://pxec.atlassian.net/browse/ECB2E-10122)｜檢核上傳的批次標籤EXCEL(新增標籤)(預購)
+### B05｜[ECB2E-10122](https://pxec.atlassian.net/browse/ECB2E-10122)｜SCM>批次>B05_檢核上傳的批次標籤EXCEL(新增標籤)(預購)
 
 開發重點：
 - 檢核 F06（Step4 上傳標籤檔）上傳之標籤 EXCEL 是否符合 B04 產出格式與標籤填寫規則。
 
 畫面欄位邏輯：見下方「F06」上傳紀錄表。
 
-### B06｜[ECB2E-10123](https://pxec.atlassian.net/browse/ECB2E-10123)｜回傳新品草稿及標籤草稿清單給前端(轉單+預購)
+### B06｜[ECB2E-10123](https://pxec.atlassian.net/browse/ECB2E-10123)｜SCM>批次>B06_回傳新品草稿及標籤草稿清單給前端(轉單+預購)
 
 開發重點：
 - 回傳新品草稿／標籤草稁清單，供 F05（Step3查詢結果）與 F02（草稿查詢與送審）兩張畫面共用。
@@ -62,14 +62,14 @@
 
 畫面欄位邏輯：見下方「F05」「F02」查詢條件表。
 
-### B07｜[ECB2E-10124](https://pxec.atlassian.net/browse/ECB2E-10124)｜Insert標籤草稿到PostgreSQL(新增標籤)(轉單+預購)
+### B07｜[ECB2E-10124](https://pxec.atlassian.net/browse/ECB2E-10124)｜SCM>批次>B07_Insert標籤草稿到PostgreSQL(新增標籤)(轉單+預購)
 
 開發重點：
 - 將 B05 驗證通過的標籤資料寫入 PostgreSQL 標籤草稿表（需 DB00 欄位已存在）。
 
 畫面欄位邏輯：無獨立畫面；寫入結果反映在 F05/F08/F02 查詢結果的「標籤」狀態欄。
 
-### B08｜[ECB2E-10125](https://pxec.atlassian.net/browse/ECB2E-10125)｜滙入大眾版新品提報EXCEL時擴增標籤判斷(轉單)
+### B08｜[ECB2E-10125](https://pxec.atlassian.net/browse/ECB2E-10125)｜SCM>批次>B08_滙入大眾版新品提報EXCEL時擴增標籤判斷(轉單)
 
 開發重點：
 - 大眾版（轉單）匯入一般商品提報 EXCEL（F07 上傳流程）時，擴增標籤檢測判斷邏輯，比照預購版 B04/B05 驗證規則。
@@ -77,22 +77,22 @@
 
 畫面欄位邏輯：見下方「F08」查詢結果表「標籤」狀態欄。
 
-### B09｜[ECB2E-10126](https://pxec.atlassian.net/browse/ECB2E-10126)｜全聯分類（四層）主檔查詢API(預購+轉單)
+### B09｜[ECB2E-10126](https://pxec.atlassian.net/browse/ECB2E-10126)｜SCM>批次>B09_全聯分類（四層）主檔查詢API(預購+轉單)
 
 開發重點：
 - 提供全聯分類（四層）主檔查詢 API，供 F03 分類四層下拉使用。
-- 分類主檔為為全聯分類(SYS_BackendCategory.Source=1 and Status=0)。
+- 分類主檔為全聯分類(SYS_BackendCategory.Source=1 and Status=0)。
 
 畫面欄位邏輯：見下方「F03」選擇條件表「全聯分類（四層）」欄。
 
-### B10｜[ECB2E-10128](https://pxec.atlassian.net/browse/ECB2E-10128)｜品牌主檔查詢API(預購+轉單)
+### B10｜[ECB2E-10128](https://pxec.atlassian.net/browse/ECB2E-10128)｜SCM>批次>B10_品牌主檔查詢API(預購+轉單)
 
 開發重點：
 - 提供品牌主檔查詢 API，供 F03「品牌選擇」搜尋框與勾選清單使用（後端提供）。
 
 畫面欄位邏輯：見下方「F03」選擇條件表「品牌選擇」欄。
 
-### B11｜[ECB2E-10130](https://pxec.atlassian.net/browse/ECB2E-10130)｜標籤送審API(預購+轉單)
+### B11｜[ECB2E-10130](https://pxec.atlassian.net/browse/ECB2E-10130)｜SCM>批次>B11_標籤送審API(預購+轉單)
 
 開發重點：
 - 標籤送審共用核心 API，供 B12（預購）、B13（大眾）呼叫；負責檢查草稿「標籤」狀態是否為「通過」才允許送審。
@@ -100,21 +100,21 @@
 
 畫面欄位邏輯：見下方「F02」查詢結果表「標籤」欄與勾選邏輯。
 
-### B12｜[ECB2E-10170](https://pxec.atlassian.net/browse/ECB2E-10170)｜預購版-草稿送審動作(呼叫標籤送審API)(預購)
+### B12｜[ECB2E-10170](https://pxec.atlassian.net/browse/ECB2E-10170)｜SCM>批次>B12_預購版-草稿送審動作(呼叫標籤送審API)(預購)
 
 開發重點：
 - 預購流程「批次送出審核」按鈕（F02，`草稿查詢與送審.html?from=preorder`）的送審動作，內部呼叫 B11。
 
 畫面欄位邏輯：見下方「F02」toolbar「批次送出審核」按鈕邏輯。
 
-### B13｜[ECB2E-10171](https://pxec.atlassian.net/browse/ECB2E-10171)｜大眾版-草稿送審動作(呼叫標籤送審API)(轉單)
+### B13｜[ECB2E-10171](https://pxec.atlassian.net/browse/ECB2E-10171)｜SCM>批次>B13_大眾版-草稿送審動作(呼叫標籤送審API)(轉單)
 
 開發重點：
 - 大眾（轉單）流程「批次送出審核」按鈕（F02，`草稿查詢與送審.html?from=batch`）的送審動作，內部呼叫 B11；與 B12 為獨立 ticket，因兩流程送審後的下游動作不同。
 
 畫面欄位邏輯：見下方「F02」toolbar「批次送出審核」按鈕邏輯。
 
-### B14｜[ECB2E-10172](https://pxec.atlassian.net/browse/ECB2E-10172)｜草稿與標籤草稿 刪除／複製(預購+轉單)
+### B14｜[ECB2E-10172](https://pxec.atlassian.net/browse/ECB2E-10172)｜SCM>批次>B14_草稿與標籤草稿 刪除／複製(預購+轉單)
 
 開發重點：
 - 支援 F05/F08 表格單列「刪除」按鈕（僅刪除該筆標籤草稿）。
@@ -122,7 +122,7 @@
 
 畫面欄位邏輯：見下方「F05」「F08」「F02」操作欄表格。
 
-### B15｜[ECB2E-10173](https://pxec.atlassian.net/browse/ECB2E-10173)｜大眾Step0-競業範本新增標籤欄位(轉單)
+### B15｜[ECB2E-10173](https://pxec.atlassian.net/browse/ECB2E-10173)｜SCM>批次>B15_大眾Step0-競業範本新增標籤欄位(轉單)
 
 開發重點：
 - 既有「產生PX提報Excel檔」（大眾 Step0 競業商品提報，main-1，D1206商品異動格式）輸出範本新增標籤欄位，讓透過競業格式匯入的商品也能承載標籤資訊。
@@ -134,7 +134,7 @@
 
 ## 二、前端開發單（14 張，含查詢條件／查詢結果欄位邏輯表）
 
-### F01｜[ECB2E-10174](https://pxec.atlassian.net/browse/ECB2E-10174)｜新選單「商品批次作業」與側邊導覽(預購)
+### F01｜[ECB2E-10174](https://pxec.atlassian.net/browse/ECB2E-10174)｜SCM>批次>F01_新選單「商品批次作業」與側邊導覽(預購)
 
 開發重點：
 - 新增側邊選單分組與各步驟頁面路由骨架，不含各步驟畫面明細（明細由 F03~F09 承接）。
@@ -146,7 +146,7 @@
 | 大眾版商品管理 | 商品批次提報、商品單一提報、草稿查詢及送審(`?from=batch`)、其餘既有項目 | 預設收合（`display:none`），僅 `商品批次提報.html` 預設展開且該項目標記 active |
 | 申請全聯貨號 | 批次申請全聯貨號、單一申請全聯貨號、草稿查詢與送審(`?from=preorder`)、貨號申請進度 | 不收合，依目前所在頁面標記 active |
 
-### F02｜[ECB2E-10175](https://pxec.atlassian.net/browse/ECB2E-10175)｜草稿與標籤草稿的查詢/編輯/下載/送審(轉單+預購)
+### F02｜[ECB2E-10175](https://pxec.atlassian.net/browse/ECB2E-10175)｜SCM>批次>F02_草稿與標籤草稿的查詢/編輯/下載/送審(轉單+預購)
 
 開發重點：
 - 草稿查詢與送審共用元件，供預購（`?from=preorder`）與大眾/轉單（`?from=batch`）兩情境共用，依 URL `from` 參數動態改寫麵包屑與側邊選單 active 狀態。
@@ -175,7 +175,7 @@
 
 Toolbar 邏輯：「批次送出審核」按鈕（呼叫 B12／B13）＋已勾選筆數提示＋圖例說明（「通過」=檢測合格、「編輯」=尚未通過需點擊修正）。
 
-### F03｜[ECB2E-10176](https://pxec.atlassian.net/browse/ECB2E-10176)｜Step1-全聯分類/品牌選擇與產生批次範本畫面(預購)
+### F03｜[ECB2E-10176](https://pxec.atlassian.net/browse/ECB2E-10176)｜SCM>批次>F03_Step1-全聯分類/品牌選擇與產生批次範本畫面(預購)
 
 開發重點：
 - 預購 Step1：全聯分類四層下拉＋新增分類組合＋已選分類 chip 清單；品牌關鍵字搜尋＋checkbox清單＋全選/清除已選＋已選品牌 chip 清單；「產生批次商品範本 EXCEL」按鈕（呼叫 B01）。
@@ -188,7 +188,7 @@ Toolbar 邏輯：「批次送出審核」按鈕（呼叫 B12／B13）＋已勾�
 | 品牌選擇 | 關鍵字搜尋＋checkbox清單＋全選/清除已選 | 勾選項目加入下方 chip 清單，可個別 ✕ 移除；資料來源 B10（`Brand.txt` 真實清單） |
 | 產生批次商品範本EXCEL | 按鈕 | 依已選分類＋品牌組合，呼叫 B01 產生範本並帶出下載檔名 |
 
-### F04｜[ECB2E-10177](https://pxec.atlassian.net/browse/ECB2E-10177)｜Step2-上傳商品檔畫面(預購)
+### F04｜[ECB2E-10177](https://pxec.atlassian.net/browse/ECB2E-10177)｜SCM>批次>F04_Step2-上傳商品檔畫面(預購)
 
 開發重點：
 - 預購 Step2：商品範本EXCEL選擇＋商品圖檔（可多選）選擇＋「檢核檔案並打包上傳」按鈕（呼叫 B02）＋上傳紀錄表格。
@@ -201,7 +201,7 @@ Toolbar 邏輯：「批次送出審核」按鈕（呼叫 B12／B13）＋已勾�
 | 狀態 | 「處理完成」（綠）／「格式錯誤」（紅）／「處理中」（黃）三態 |
 | 操作 | 依狀態顯示「下載結果」／「下載錯誤訊息」／「查看進度」 |
 
-### F05｜[ECB2E-10178](https://pxec.atlassian.net/browse/ECB2E-10178)｜Step3-下載標籤編輯檔查詢與結果畫面(預購)
+### F05｜[ECB2E-10178](https://pxec.atlassian.net/browse/ECB2E-10178)｜SCM>批次>F05_Step3-下載標籤編輯檔查詢與結果畫面(預購)
 
 開發重點：
 - 預購 Step3：查詢條件＋查詢結果表格（含標籤母表雙顯示邏輯）＋下載標籤編輯檔（呼叫 B04）＋另開新頁按鈕（開啟 F10 彈窗）。
@@ -229,7 +229,7 @@ Toolbar 邏輯：「批次送出審核」按鈕（呼叫 B12／B13）＋已勾�
 
 Toolbar 邏輯：「⬇下載標籤編輯檔」（至少1筆 `dl-check` 勾選才 enable，呼叫 B04）＋「↗查詢結果另開新頁面」（開啟 F10 彈窗）。
 
-### F06｜[ECB2E-10179](https://pxec.atlassian.net/browse/ECB2E-10179)｜Step4-上傳標籤檔畫面(預購)
+### F06｜[ECB2E-10179](https://pxec.atlassian.net/browse/ECB2E-10179)｜SCM>批次>F06_Step4-上傳標籤檔畫面(預購)
 
 開發重點：
 - 預購 Step4：標籤EXCEL選擇＋「檢核檔案並上傳」按鈕（呼叫 B05→B07）＋上傳紀錄表格。
@@ -242,7 +242,7 @@ Toolbar 邏輯：「⬇下載標籤編輯檔」（至少1筆 `dl-check` 勾選�
 | 狀態 | 「處理完成」／「格式錯誤」／「處理中」三態 |
 | 操作 | 依狀態顯示對應動作連結 |
 
-### F07｜[ECB2E-10180](https://pxec.atlassian.net/browse/ECB2E-10180)｜Step1-範本增加標籤欄位及作業注意事項(轉單)
+### F07｜[ECB2E-10180](https://pxec.atlassian.net/browse/ECB2E-10180)｜SCM>批次>F07_Step1-範本增加標籤欄位及作業注意事項(轉單)
 
 開發重點：
 - 大眾 Step1 一般商品提報：更新「檔案範本下載」連結內容（含 B08 新增之標籤欄位），以及供應商操作注意事項文字（說明標籤填寫規則）。範圍不含流程重構，既有ZIP上傳／存成草稿／資料上傳按鈕維持不變。
@@ -256,7 +256,7 @@ Toolbar 邏輯：「⬇下載標籤編輯檔」（至少1筆 `dl-check` 勾選�
 | 存成草稿／資料上傳按鈕 | 既有功能不變 |
 | 操作注意事項文字 | 新增標籤欄位填寫規則說明，呼應 B08 標籤判斷邏輯 |
 
-### F08｜[ECB2E-10181](https://pxec.atlassian.net/browse/ECB2E-10181)｜Step2-下載標籤編輯檔查詢與結果畫面(轉單)
+### F08｜[ECB2E-10181](https://pxec.atlassian.net/browse/ECB2E-10181)｜SCM>批次>F08_Step2-下載標籤編輯檔查詢與結果畫面(轉單)
 
 開發重點：
 - 重用 F05 元件，接大眾（轉單）資料源；「標籤」狀態新增「未填」值（大眾版特有，代表尚未建立任何標籤）。
@@ -272,40 +272,40 @@ Toolbar 邏輯：「⬇下載標籤編輯檔」（至少1筆 `dl-check` 勾選�
 | 標籤母表 | 雙顯示邏輯：①狀態=通過→純文字（母表已確定）；②狀態=未填（無標籤草稿）→如果有多張母表則呈現下拉選單（預設分類的第1張母表）若無則直接文字顯示母表名稱；③狀態=編輯(有標籤草稿)→顯示該母表名稱，如果有多張母表則呈現下拉選單，若無則直接文字顯示母表名稱 |
 | 其餘欄位／操作 | 同 F05 |
 
-### F09｜[ECB2E-10182](https://pxec.atlassian.net/browse/ECB2E-10182)｜Step3-上傳標籤檔畫面(轉單)
+### F09｜[ECB2E-10182](https://pxec.atlassian.net/browse/ECB2E-10182)｜SCM>批次>F09_Step3-上傳標籤檔畫面(轉單)
 
 開發重點：
 - 重用 F06 元件，接大眾（轉單）資料源；上傳紀錄表結構同 F06。
 
-### F10｜[ECB2E-10183](https://pxec.atlassian.net/browse/ECB2E-10183)｜查詢結果彈窗-標籤編輯檔(預購)
+### F10｜[ECB2E-10183](https://pxec.atlassian.net/browse/ECB2E-10183)｜SCM>批次>F10_查詢結果彈窗-標籤編輯檔(預購)
 
 開發重點：
 - `查詢結果_預購_標籤編輯檔.html`：另開新頁彈窗，無側邊選單，僅列印／關閉視窗按鈕；直接重用 F05 查詢結果表格結構與標籤母表雙顯示邏輯，不含查詢條件區塊。
 
 查詢結果表：與 F05 完全一致（標籤／標籤母表／草稿編號／商品名稱／規格型號／品牌／全聯分類／標籤建立日期／操作）。
 
-### F11｜[ECB2E-10184](https://pxec.atlassian.net/browse/ECB2E-10184)｜查詢結果彈窗-標籤編輯檔(轉單)
+### F11｜[ECB2E-10184](https://pxec.atlassian.net/browse/ECB2E-10184)｜SCM>批次>F11_查詢結果彈窗-標籤編輯檔(轉單)
 
 開發重點：
 - `查詢結果_轉單_標籤編輯檔.html`：重用 F08 查詢結果表格（含「未填」狀態），同樣無側邊選單、無查詢條件。
 
 查詢結果表：與 F08 完全一致。
 
-### F12｜[ECB2E-10185](https://pxec.atlassian.net/browse/ECB2E-10185)｜查詢結果彈窗-草稿查詢與送審(預購)
+### F12｜[ECB2E-10185](https://pxec.atlassian.net/browse/ECB2E-10185)｜SCM>批次>F12_查詢結果彈窗-草稿查詢與送審(預購)
 
 開發重點：
 - `查詢結果_預購_草稿送審.html`：重用 F02 草稿列表表格，額外含「複製」按鈕，無側邊選單、無查詢條件。
 
 查詢結果表：與 F02 完全一致（含複製／刪除操作欄）。
 
-### F13｜[ECB2E-10186](https://pxec.atlassian.net/browse/ECB2E-10186)｜查詢結果彈窗-草稿查詢與送審(轉單)
+### F13｜[ECB2E-10186](https://pxec.atlassian.net/browse/ECB2E-10186)｜SCM>批次>F13_查詢結果彈窗-草稿查詢與送審(轉單)
 
 開發重點：
 - `查詢結果_轉單_草稿送審.html`：重用 F02 草稿列表表格，額外含「複製」按鈕，無側邊選單、無查詢條件。
 
 查詢結果表：與 F02 完全一致。
 
-### F14｜[ECB2E-10187](https://pxec.atlassian.net/browse/ECB2E-10187)｜預購選單調整模組名稱和子選單(全聯預購商品)
+### F14｜[ECB2E-10187](https://pxec.atlassian.net/browse/ECB2E-10187)｜SCM>批次>F14_預購選單調整模組名稱和子選單(全聯預購商品)
 
 開發重點：
 - 調整預購側邊選單「全聯預購商品」模組名稱與其子選單項目文字/結構，純選單文字/結構調整，不含資料串接與後端API。
@@ -327,4 +327,4 @@ Toolbar 邏輯：「⬇下載標籤編輯檔」（至少1筆 `dl-check` 勾選�
 ## 附註
 
 - 全聯分類 mock 資料僅可使用 3 個真實分類（金/銀飾類、髮束、邊夾），標籤母表僅可使用 5 個真實母表名稱（飾品／髮飾／包包／餐具／鍋具/鍋具配件），詳見 `CLAUDE.md`。
-- 完整 Jira 清單與開發順序流程圖請參閱《系統分析及開發說明書.md》；各票依賴關係與階段排序請參閱《SCM預購轉單標籤化_WBS分析與建議.md》第3、4節。
+- 完整 Jira 清單與開發順序流程圖請參閱《SCM批次提報(含標籤)_JIRA清單.md》；各票依賴關係與階段排序請參閱《SCM預購轉單標籤化_WBS分析與建議.md》第3、4節。
