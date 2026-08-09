@@ -27,24 +27,29 @@
 
 ### 1.2 後端與 DB 子任務（16 張）
 
-| 代號 | Jira Key | Ticket 名稱 | 狀態 |
-| --- | --- | --- | --- |
-| DB00 | [ECB2E-10117](https://pxec.atlassian.net/browse/ECB2E-10117) | SCM > 批次 > DB00：新增草稿欄位（標籤方式 `TagGenerateType`、複製標籤 `TagCopyFrom`）（DB） | 待辦事項 |
-| B01 | [ECB2E-10118](https://pxec.atlassian.net/browse/ECB2E-10118) | SCM > 批次 > B01：產生批次申請貨號 Excel（新品提報／預購） | 待辦事項 |
-| B02 | [ECB2E-10119](https://pxec.atlassian.net/browse/ECB2E-10119) | SCM > 批次 > B02：檢核上傳的批次申請貨號 Excel（新品提報／預購） | 待辦事項 |
-| B03 | [ECB2E-10120](https://pxec.atlassian.net/browse/ECB2E-10120) | SCM > 批次 > B03：批次產生新品草稿（含小幫手與複製標籤）（新品提報／預購） | 待辦事項 |
-| B04 | [ECB2E-10121](https://pxec.atlassian.net/browse/ECB2E-10121) | SCM > 批次 > B04：產生批次標籤填寫 Excel（新增標籤／預購） | 待辦事項 |
-| B05 | [ECB2E-10122](https://pxec.atlassian.net/browse/ECB2E-10122) | SCM > 批次 > B05：檢核上傳的批次標籤 Excel（新增標籤／預購） | 待辦事項 |
-| B06 | [ECB2E-10123](https://pxec.atlassian.net/browse/ECB2E-10123) | SCM > 批次 > B06：回傳新品草稿及標籤草稿清單給前端（轉單＋預購） | 待辦事項 |
-| B07 | [ECB2E-10124](https://pxec.atlassian.net/browse/ECB2E-10124) | SCM > 批次 > B07：將標籤草稿寫入 PostgreSQL（新增標籤／轉單＋預購） | 待辦事項 |
-| B08 | [ECB2E-10125](https://pxec.atlassian.net/browse/ECB2E-10125) | SCM > 批次 > B08：匯入大眾版新品提報 Excel 時擴增標籤判斷（轉單） | 待辦事項 |
-| B09 | [ECB2E-10126](https://pxec.atlassian.net/browse/ECB2E-10126) | SCM > 批次 > B09：全聯分類（四層）主檔查詢 API（預購＋轉單） | 待辦事項 |
-| B10 | [ECB2E-10128](https://pxec.atlassian.net/browse/ECB2E-10128) | SCM > 批次 > B10：品牌主檔查詢 API（預購＋轉單） | 待辦事項 |
-| B11 | [ECB2E-10130](https://pxec.atlassian.net/browse/ECB2E-10130) | SCM > 批次 > B11：標籤送審 API（預購＋轉單） | 待辦事項 |
-| B12 | [ECB2E-10170](https://pxec.atlassian.net/browse/ECB2E-10170) | SCM > 批次 > B12：預購版草稿送審動作（呼叫標籤送審 API／預購） | 待辦事項 |
-| B13 | [ECB2E-10171](https://pxec.atlassian.net/browse/ECB2E-10171) | SCM > 批次 > B13：大眾版草稿送審動作（呼叫標籤送審 API／轉單） | 待辦事項 |
-| B14 | [ECB2E-10172](https://pxec.atlassian.net/browse/ECB2E-10172) | SCM > 批次 > B14：草稿與標籤草稿刪除／複製（預購＋轉單） | 待辦事項 |
-| B15 | [ECB2E-10173](https://pxec.atlassian.net/browse/ECB2E-10173) | SCM > 批次 > B15：大眾版 Step 0 競業範本新增標籤欄位（轉單） | 待辦事項 |
+<table>
+<thead>
+<tr><th nowrap>代號</th><th nowrap>Jira Key</th><th nowrap>Ticket 名稱</th><th nowrap>狀態</th></tr>
+</thead>
+<tbody>
+<tr><td nowrap>DB00</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10117">ECB2E-10117</a></td><td nowrap>SCM &gt; 批次 &gt; DB00：新增草稿欄位（標籤方式 <code>TagGenerateType</code>、複製標籤 <code>TagCopyFrom</code>）（DB）</td><td nowrap>待辦事項</td></tr>
+<tr><td nowrap>B01</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10118">ECB2E-10118</a></td><td nowrap>SCM &gt; 批次 &gt; B01：產生批次申請貨號 Excel（新品提報／預購）</td><td nowrap>待辦事項</td></tr>
+<tr><td nowrap>B02</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10119">ECB2E-10119</a></td><td nowrap>SCM &gt; 批次 &gt; B02：檢核上傳的批次申請貨號 Excel（新品提報／預購）</td><td nowrap>待辦事項</td></tr>
+<tr><td nowrap>B03</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10120">ECB2E-10120</a></td><td nowrap>SCM &gt; 批次 &gt; B03：批次產生新品草稿（含小幫手與複製標籤）（新品提報／預購）</td><td nowrap>待辦事項</td></tr>
+<tr><td nowrap>B04</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10121">ECB2E-10121</a></td><td nowrap>SCM &gt; 批次 &gt; B04：產生批次標籤填寫 Excel（新增標籤／預購）</td><td nowrap>待辦事項</td></tr>
+<tr><td nowrap>B05</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10122">ECB2E-10122</a></td><td nowrap>SCM &gt; 批次 &gt; B05：檢核上傳的批次標籤 Excel（新增標籤／預購）</td><td nowrap>待辦事項</td></tr>
+<tr><td nowrap>B06</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10123">ECB2E-10123</a></td><td nowrap>SCM &gt; 批次 &gt; B06：回傳新品草稿及標籤草稿清單給前端（轉單＋預購）</td><td nowrap>待辦事項</td></tr>
+<tr><td nowrap>B07</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10124">ECB2E-10124</a></td><td nowrap>SCM &gt; 批次 &gt; B07：將標籤草稿寫入 PostgreSQL（新增標籤／轉單＋預購）</td><td nowrap>待辦事項</td></tr>
+<tr><td nowrap>B08</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10125">ECB2E-10125</a></td><td nowrap>SCM &gt; 批次 &gt; B08：匯入大眾版新品提報 Excel 時擴增標籤判斷（轉單）</td><td nowrap>待辦事項</td></tr>
+<tr><td nowrap>B09</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10126">ECB2E-10126</a></td><td nowrap>SCM &gt; 批次 &gt; B09：全聯分類（四層）主檔查詢 API（預購＋轉單）</td><td nowrap>待辦事項</td></tr>
+<tr><td nowrap>B10</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10128">ECB2E-10128</a></td><td nowrap>SCM &gt; 批次 &gt; B10：品牌主檔查詢 API（預購＋轉單）</td><td nowrap>待辦事項</td></tr>
+<tr><td nowrap>B11</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10130">ECB2E-10130</a></td><td nowrap>SCM &gt; 批次 &gt; B11：標籤送審 API（預購＋轉單）</td><td nowrap>待辦事項</td></tr>
+<tr><td nowrap>B12</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10170">ECB2E-10170</a></td><td nowrap>SCM &gt; 批次 &gt; B12：預購版草稿送審動作（呼叫標籤送審 API／預購）</td><td nowrap>待辦事項</td></tr>
+<tr><td nowrap>B13</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10171">ECB2E-10171</a></td><td nowrap>SCM &gt; 批次 &gt; B13：大眾版草稿送審動作（呼叫標籤送審 API／轉單）</td><td nowrap>待辦事項</td></tr>
+<tr><td nowrap>B14</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10172">ECB2E-10172</a></td><td nowrap>SCM &gt; 批次 &gt; B14：草稿與標籤草稿刪除／複製（預購＋轉單）</td><td nowrap>待辦事項</td></tr>
+<tr><td nowrap>B15</td><td nowrap><a href="https://pxec.atlassian.net/browse/ECB2E-10173">ECB2E-10173</a></td><td nowrap>SCM &gt; 批次 &gt; B15：大眾版 Step 0 競業範本新增標籤欄位（轉單）</td><td nowrap>待辦事項</td></tr>
+</tbody>
+</table>
 
 > [!NOTE]
 > Jira 編號 ECB2E-10127、ECB2E-10129 未使用，並非本專案遺漏項目。
