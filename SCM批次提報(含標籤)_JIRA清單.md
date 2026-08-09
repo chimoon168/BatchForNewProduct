@@ -3,6 +3,14 @@
 對應 Jira 主單：[ECB2E-9967](https://pxec.atlassian.net/browse/ECB2E-9967)「SCM>預購>批次申請全聯貨號(UIUX重構)」
 詳細項目說明、對應步驟、依賴理由請參閱《SCM預購轉單標籤化_WBS分析與建議.md》，本文件僅彙整「完整 WBS 清單（含 Jira 連結）」與「開發順序流程圖」兩項。
 
+## 目錄
+
+- [1. 開發 WBS — Jira 主單與子任務清單](#1-開發-wbs-jira-主單與子任務清單)
+  - [1.1 主單](#11-主單)
+  - [1.2 子任務 — 後端／DB（16 張）](#12-子任務-後端db16-張)
+  - [1.3 子任務 — 前端（14 張）](#13-子任務-前端14-張)
+- [2. 開發順序流程圖（Mermaid）](#2-開發順序流程圖mermaid)
+
 ---
 
 ## 1. 開發 WBS — Jira 主單與子任務清單
@@ -174,5 +182,10 @@ flowchart TD
   class B01,B02,B03,B04,B05,B06,B07,B08,B09,B10,B11,B12,B13,B14,B15 backend;
   class F01,F02,F03,F04,F05,F06,F07,F08,F09,F10,F11,F12,F13,F14 frontend;
 ```
+
+<script type="module">
+  import mermaid from 'https://jsdelivr.net';
+  mermaid.initialize({ startOnLoad: true });
+</script>
 
 註：B15 為獨立項目（無前後依賴），圖中僅放在階段0，不影響其他節點的排序。共用元件 F02 在轉單（大眾）情境下的回歸測試由 QE 另行定義，圖中不再畫出。
