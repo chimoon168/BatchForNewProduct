@@ -184,7 +184,14 @@ flowchart TD
 ```
 
 <script type="module">
-  import mermaid from 'https://jsdelivr.net';
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  document.querySelectorAll('code[class*="language-mermaid"]').forEach(function (codeEl) {
+    var wrapper = codeEl.closest('pre') || codeEl.parentElement;
+    var div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = codeEl.textContent;
+    wrapper.replaceWith(div);
+  });
   mermaid.initialize({ startOnLoad: true });
 </script>
 
