@@ -27,7 +27,7 @@
 
 ### 1.2 後端與 DB 子任務（16 張）
 
-<table>
+<table width=100%>
 <thead>
 <tr><th nowrap>代號</th><th nowrap>Jira Key</th><th nowrap>Ticket 名稱</th><th nowrap>狀態</th></tr>
 </thead>
