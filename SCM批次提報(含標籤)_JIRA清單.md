@@ -1,4 +1,4 @@
-# SCM 預購／轉單批次提報（含標籤）— JIRA清單
+# SCM 預購／轉單批次提報（含標籤）— 系統分析與開發說明書
 
 ## 文件說明
 
@@ -10,8 +10,9 @@
 
 - [1. 開發 WBS：Jira 主單與子任務清單](#1-開發-wbsjira-主單與子任務清單)
   - [1.1 主單](#11-主單)
-  - [1.2 後端與 DB 子任務（16 張）](#12-後端與-db-子任務16-張)
+  - [1.2 後端與 DB 子任務（17 張）](#12-後端與-db-子任務17-張)
   - [1.3 前端子任務（14 張）](#13-前端子任務14-張)
+  - [1.4 其他子任務（2 張）](#14-其他子任務2-張)
 - [2. 任務統計](#2-任務統計)
 - [3. 開發順序流程圖](#3-開發順序流程圖)
 
@@ -25,11 +26,11 @@
 | --- | --- | --- | --- |
 | [ECB2E-9967](https://pxec.atlassian.net/browse/ECB2E-9967) | SCM > 預購 > 批次申請全聯貨號（UI／UX 重構） | Story | 待辦事項 |
 
-### 1.2 後端與 DB 子任務（16 張）
+### 1.2 後端與 DB 子任務（17 張）
 
 | 代號 | Jira Key | Ticket 名稱 | 狀態 |
 | --- | --- | --- | --- |
-| DB00 |[ECB2E-10117](https://pxec.atlassian.net/browse/ECB2E-10117) | SCM>批次>DB00_新增草稿欄位(標籤)(DB)| 待辦事項 |
+| DB00 | [ECB2E-10117](https://pxec.atlassian.net/browse/ECB2E-10117) | SCM>批次>DB00_新增草稿欄位(標籤)(DB) | 待辦事項 |
 | B01 | [ECB2E-10118](https://pxec.atlassian.net/browse/ECB2E-10118) | SCM > 批次 > B01：產生批次申請貨號 Excel（新品提報／預購） | 待辦事項 |
 | B02 | [ECB2E-10119](https://pxec.atlassian.net/browse/ECB2E-10119) | SCM > 批次 > B02：檢核上傳的批次申請貨號 Excel（新品提報／預購） | 待辦事項 |
 | B03 | [ECB2E-10120](https://pxec.atlassian.net/browse/ECB2E-10120) | SCM > 批次 > B03：批次產生新品草稿（含小幫手與複製標籤）（新品提報／預購） | 待辦事項 |
@@ -45,6 +46,7 @@
 | B13 | [ECB2E-10171](https://pxec.atlassian.net/browse/ECB2E-10171) | SCM > 批次 > B13：大眾版草稿送審動作（呼叫標籤送審 API／轉單） | 待辦事項 |
 | B14 | [ECB2E-10172](https://pxec.atlassian.net/browse/ECB2E-10172) | SCM > 批次 > B14：草稿與標籤草稿刪除／複製（預購＋轉單） | 待辦事項 |
 | B15 | [ECB2E-10173](https://pxec.atlassian.net/browse/ECB2E-10173) | SCM > 批次 > B15：大眾版 Step 0 競業範本新增標籤欄位（轉單） | 待辦事項 |
+| B16 | [ECB2E-10207](https://pxec.atlassian.net/browse/ECB2E-10207) | SCM > 批次 > B16：預購選單調整和上線前權限移轉 | 待辦事項 |
 
 ### 1.3 前端子任務（14 張）
 
@@ -65,6 +67,13 @@
 | F13 | [ECB2E-10186](https://pxec.atlassian.net/browse/ECB2E-10186) | SCM > 批次 > F13：查詢結果彈窗－草稿查詢與送審（轉單） | 待辦事項 |
 | F14 | [ECB2E-10187](https://pxec.atlassian.net/browse/ECB2E-10187) | SCM > 批次 > F14：預購選單調整模組名稱和子選單（全聯預購商品） | 待辦事項 |
 
+### 1.4 其他子任務（2 張）
+
+| 代號 | Jira Key | Ticket 名稱 | 狀態 |
+| --- | --- | --- | --- |
+| P01 | [ECB2E-10208](https://pxec.atlassian.net/browse/ECB2E-10208) | SCM > 批次 > P01：廠服說明批次新流程和手冊製作 | 待辦事項 |
+| P02 | [ECB2E-10209](https://pxec.atlassian.net/browse/ECB2E-10209) | SCM > 批次 > P02：全聯採購說明批次申請新貨號流程 | 待辦事項 |
+
 ---
 
 ## 2. 任務統計
@@ -72,9 +81,10 @@
 | 分類 | 數量 |
 | --- | ---: |
 | DB | 1 張 |
-| 後端 | 15 張 |
+| 後端 | 16 張 |
 | 前端 | 14 張 |
-| **子任務合計** | **30 張** |
+| 其他 | 2 張 |
+| **子任務合計** | **33 張** |
 
 所有子任務均掛在主單 [ECB2E-9967](https://pxec.atlassian.net/browse/ECB2E-9967) 之下。
 
