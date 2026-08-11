@@ -116,6 +116,7 @@ flowchart TB
     B08["B08：匯入大眾版 Excel 擴增標籤判斷"]
     B13["B13：大眾版送審動作"]
     B15["B15：競業範本新增標籤欄位（轉單）"]
+    B16["B16：預購選單重編＋權限資料移轉"]
   end
 
   subgraph LANE_FRONTEND["泳道：前端"]
@@ -134,6 +135,12 @@ flowchart TB
     F09["F09：Step 3 畫面（轉單，重用 F06）"]
     F11["F11：標籤編輯檔結果彈窗（轉單）"]
     F13["F13：草稿查詢與送審結果彈窗（轉單）"]
+  end
+
+  subgraph LANE_OTHER["泳道：上線前置"]
+    direction LR
+    P01["P01：廠服說明新流程＋操作手冊(HTML)"]
+    P02["P02：全聯採購說明新流程＋操作手冊(HTML)"]
   end
 
   DB00 --> B03
@@ -173,20 +180,27 @@ flowchart TB
   F08 --> F11
   F02 --> F13
   B13 --> F13
+  F01 --> B16
+  F14 --> B16
+  B16 --> P01
+  B16 --> P02
 
   classDef db fill:#EEF0F4,stroke:#7A8496,color:#333;
   classDef backend fill:#EAF6FC,stroke:#169BD5,color:#333;
   classDef frontend fill:#FDF1F7,stroke:#DF0870,color:#333;
+  classDef other fill:#FDF3E8,stroke:#E8912D,color:#333;
   class DB00 db;
-  class B01,B02,B03,B04,B05,B06,B07,B08,B09,B10,B11,B12,B13,B14,B15 backend;
+  class B01,B02,B03,B04,B05,B06,B07,B08,B09,B10,B11,B12,B13,B14,B15,B16 backend;
   class F01,F02,F03,F04,F05,F06,F07,F08,F09,F10,F11,F12,F13,F14 frontend;
+  class P01,P02 other;
 ```
 
 ### 圖例
 
-- 圖表採泳道圖（swimlane）呈現：由上至下分為「DB」「後端」「前端」三條泳道，對應開發角色／團隊。
+- 圖表採泳道圖（swimlane）呈現：由上至下分為「DB」「後端」「前端」「上線前置」四條泳道，對應開發角色／團隊。
 - 同一泳道內節點由左至右僅為排版順序，不代表時間先後；節點間的先後與相依關係一律以箭頭為準。
 - 跨泳道的箭頭代表該開發單需等前一個開發單完成後才能開工（例如 DB00 → B03 表示 B03 需等 DB00 完成）。
 - 灰色：DB
 - 藍色：後端
 - 粉紅色：前端
+- 橘色：上線前置
