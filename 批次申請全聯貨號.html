@@ -152,6 +152,7 @@
     align-items:center;justify-content:center;
   }
   .primary-btn:disabled{background:#B9DCEE;cursor:not-allowed;}
+  .primary-btn.is-disabled{background:#B9DCEE;cursor:not-allowed;pointer-events:none;}
   .ghost-btn{
     background:#fff;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 14px;
     font-size:14px;cursor:pointer;
@@ -324,10 +325,6 @@
     <div class="content">
       <div class="page-head">
         <div class="page-title">批次申請全聯貨號</div>
-        <div class="head-actions">
-          <div class="outline-btn">品牌代號速查</div>
-          <div class="outline-btn">編碼對照表</div>
-        </div>
       </div>
 
       <div class="card">
@@ -379,9 +376,9 @@
               </div>
             </div>
           </div>
-          <div class="action-row">
-            <div class="ghost-btn" onclick="clearSelections()">清除選擇</div>
+          <div class="action-row" style="justify-content:flex-start;">
             <a class="primary-btn" href="全聯貨號批次申請範本_UAT.xlsx" download="全聯預購批次申請貨號0123.xlsx" onclick="setTemplateDownloadName(this)">產生批次商品範本 EXCEL</a>
+            <div class="ghost-btn" onclick="clearSelections()">清除選擇</div>
           </div>
 
           <div class="steps-note">
@@ -408,22 +405,16 @@
         <!-- STEP 2 -->
         <div class="step-panel" id="panel-2">
           <div class="section-title">上傳已填寫完成之商品檔與圖檔</div>
-          <div class="upload-grid">
+          <div class="upload-grid" style="grid-template-columns:1fr;">
             <div class="upload-box">
               <div class="icon">📄</div>
               <div class="fname">尚未選擇檔案</div>
-              <button class="choose-btn">📁 選擇商品範本EXCEL</button>
-              <div class="hint">請上傳步驟1下載並填寫完成之商品範本EXCEL</div>
-            </div>
-            <div class="upload-box">
-              <div class="icon">🖼️</div>
-              <div class="fname">尚未選擇圖檔（可多選）</div>
-              <button class="choose-btn">📁 選擇商品圖檔</button>
-              <div class="hint">檔名需與範本內圖片欄位一致，支援 jpg / png</div>
+              <button class="choose-btn">📁 選擇ZIP檔案</button>
+              <div class="hint">請將步驟1下載並填寫完成之商品範本EXCEL與對應圖檔打包為單一ZIP檔案後上傳</div>
             </div>
           </div>
-          <div class="action-row">
-            <button class="primary-btn">檢核檔案並打包上傳</button>
+          <div class="action-row" style="justify-content:flex-start;">
+            <button class="primary-btn">檢核檔案並上傳</button>
           </div>
 
           <div class="section-title" style="margin-top:26px;">上傳紀錄</div>
@@ -645,7 +636,7 @@
               <div class="hint">請上傳已填寫完成之商品標籤EXCEL檔</div>
             </div>
           </div>
-          <div class="action-row">
+          <div class="action-row" style="justify-content:flex-start;">
             <button class="primary-btn">檢核檔案並上傳</button>
           </div>
 

@@ -33,6 +33,8 @@
   .toolbar-v2{margin-bottom:10px;}
   .btn-row-left{display:flex;gap:10px;margin-bottom:8px;}
   .primary-btn{background:var(--primary);color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:14px;font-weight:700;cursor:pointer;}
+  .primary-btn:disabled{background:#B9DCEE;cursor:not-allowed;}
+  .primary-btn.is-disabled{background:#B9DCEE;cursor:not-allowed;pointer-events:none;}
   .ghost-btn{background:#fff;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 14px;font-size:14px;cursor:pointer;}
   .ghost-btn:disabled{opacity:.45;cursor:not-allowed;}
   .ghost-btn.is-disabled{opacity:.45;cursor:not-allowed;pointer-events:none;}
@@ -85,7 +87,7 @@
       </div>
       <div class="toolbar-v2">
         <div class="btn-row-left" style="margin-bottom:0;">
-          <button id="resultDownloadBtn" class="primary-btn" disabled>⬇ 下載標籤編輯檔</button>
+          <a id="resultDownloadBtn" class="primary-btn is-disabled" href="全聯商品標籤批次作業範本_UAT.zip" download>⬇ 下載標籤編輯檔</a>
         </div>
       </div>
       <div class="table-scroll">

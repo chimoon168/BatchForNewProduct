@@ -87,6 +87,7 @@
   .hint-inline{font-size:13px;color:var(--text-sub);}
   .primary-btn{background:var(--primary);color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:14px;font-weight:700;cursor:pointer;}
   .primary-btn:disabled{background:#B9DCEE;cursor:not-allowed;}
+  .primary-btn.is-disabled{background:#B9DCEE;cursor:not-allowed;pointer-events:none;}
   .ghost-btn{background:#fff;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 14px;font-size:14px;cursor:pointer;}
   .ghost-btn:disabled{opacity:.45;cursor:not-allowed;}
   .ghost-btn.is-disabled{opacity:.45;cursor:not-allowed;pointer-events:none;}
@@ -245,10 +246,10 @@
       <div class="card">
         <div class="main-tabs">
           <div class="main-tab active" data-view="0" data-panel="main-1" tabindex="0"><span class="num">0</span>競業商品提報</div>
-          <div class="main-tab" data-view="1" data-page="批次申請全聯貨號.html" tabindex="0"><span class="num">1</span>下載商品範本</div>
-          <div class="main-tab" data-view="2" data-page="批次申請全聯貨號.html" tabindex="0"><span class="num">2</span>上傳商品檔</div>
-          <div class="main-tab" data-view="3" data-page="批次申請全聯貨號.html" tabindex="0"><span class="num">3</span>下載標籤編輯檔</div>
-          <div class="main-tab" data-view="4" data-page="批次申請全聯貨號.html" tabindex="0"><span class="num">4</span>上傳標籤檔</div>
+          <div class="main-tab" data-view="1" data-panel="main-2" tabindex="0"><span class="num">1</span>下載商品範本</div>
+          <div class="main-tab" data-view="2" data-panel="main-2" tabindex="0"><span class="num">2</span>上傳商品檔</div>
+          <div class="main-tab" data-view="3" data-panel="main-3" tabindex="0"><span class="num">3</span>下載標籤編輯檔</div>
+          <div class="main-tab" data-view="4" data-panel="main-4" tabindex="0"><span class="num">4</span>上傳標籤檔</div>
           <div class="main-tab" data-view="5" data-page="草稿查詢與送審_大眾.html" tabindex="0"><span class="num">5</span>草稿查詢與送審</div>
         </div>
 
@@ -270,7 +271,7 @@
               <button class="choose-btn">📁 選擇檔案</button>
               <div class="hint-inline">（請選擇D1206商品異動-其他資料異動）</div>
             </div>
-            <div class="upload-row">
+            <div class="upload-row" style="justify-content:flex-start;">
               <button class="primary-btn">產生PX提報Excel檔</button>
             </div>
             <div class="steps-note">
@@ -405,7 +406,7 @@
           </div>
           <div class="toolbar-v2">
             <div class="btn-row-left" style="align-items:center;margin-bottom:0;">
-              <button id="main3DownloadBtn" class="primary-btn" disabled>⬇ 下載標籤編輯檔</button>
+              <a id="main3DownloadBtn" class="primary-btn is-disabled" href="全聯商品標籤批次作業範本_UAT.zip" download>⬇ 下載標籤編輯檔</a>
               <button class="open-newpage-btn" style="padding:8px 18px;font-size:14px;font-weight:700;" onclick="window.open('查詢結果_轉單_標籤編輯檔.html','_blank')">↗ 查詢結果另開新頁面</button>
             </div>
           </div>
@@ -540,7 +541,7 @@
             <button class="choose-btn">📁 選擇檔案</button>
             <div class="hint-inline">（請選擇已填寫完成之商品標籤EXCEL檔）</div>
           </div>
-          <div class="upload-row">
+          <div class="upload-row" style="justify-content:flex-start;">
             <button class="primary-btn">檢核檔案並上傳</button>
           </div>
 
