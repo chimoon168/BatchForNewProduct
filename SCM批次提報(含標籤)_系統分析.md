@@ -67,7 +67,7 @@
 ### B02｜[ECB2E-10119](https://pxec.atlassian.net/browse/ECB2E-10119)｜SCM>批次>B02_檢核上傳的批次申請貨號EXCEL(新品提報)(預購)
 
 開發重點：
-- 檢核 F04（Step2 上傳商品檔）上傳之範本 EXCEL 是否符合 B01 產出格式，回傳結果供「上傳紀錄」表格三態顯示。
+- 檢核 F04（Step2 上傳商品檔）上傳之範本 EXCEL 是否符合 B01 產出格式，回傳結果供「上傳紀錄」表格二態顯示。
 
 畫面欄位邏輯：見下方「F04」上傳紀錄表。
 
@@ -214,7 +214,7 @@
 | 欄位 | 顯示／互動邏輯 |
 |---|---|
 | 全選／單列 checkbox | 標籤狀態非「通過」時 disabled，滑鼠提示「標籤尚未通過檢測，無法送出審核」 |
-| 標籤（狀態） | 「通過」（綠）／「編輯」（粉），決定該列是否可勾選送審 |
+| 標籤（狀態） | <span style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:600;background:#e6f4ea;color:#1e7e34;">通過</span>／<span style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:600;background:#fde8f2;color:#c2255c;">編輯</span>，決定該列是否可勾選送審 |
 | 商品（狀態） | 固定顯示「編輯」連結，點擊進入該筆草稿編輯畫面 |
 | 草稿編號／商品名稱／規格型號／品牌／全聯分類 | 純顯示，資料來自 B06 清單 API |
 | 原始建議價／原始售價／原始進價／原始毛利率 | 顯示草稿建立當下捕捉的原始價格與毛利數據，供審核比對 |
@@ -246,8 +246,8 @@ Toolbar 邏輯：「批次送出審核」按鈕（呼叫 B12／B13）＋已勾�
 | 欄位 | 顯示邏輯 |
 |---|---|
 | 檔案名稱／上傳時間／商品筆數 | 純顯示 |
-| 狀態 | 「處理完成」（綠）／「格式錯誤」（紅）／「處理中」（黃）三態 |
-| 操作 | 依狀態顯示「下載結果」／「下載錯誤訊息」／「查看進度」 |
+| 狀態 | 「處理完成」（綠）／「格式錯誤」（紅）二態 |
+| 操作 | 依狀態顯示「下載結果」／「下載錯誤訊息」 |
 
 ### F05｜[ECB2E-10178](https://pxec.atlassian.net/browse/ECB2E-10178)｜SCM>批次>F05_Step3-下載標籤編輯檔查詢與結果畫面(預購)
 
@@ -261,9 +261,8 @@ Toolbar 邏輯：「批次送出審核」按鈕（呼叫 B12／B13）＋已勾�
 | 商品名稱 | 文字輸入 | 關鍵字模糊比對 |
 | 規格型號 | 文字輸入 | 關鍵字模糊比對 |
 | 全聯分類 | 下拉選單 | 由後端提供依據「草稿的CategoryId」Group的四層式清單，不是全部全聯分類 |
-| 標籤母表 | 下拉選單 | 由後端提供依據「草稿的FormId」Group的母表清單，不是全部標籤母表
-注意，未填標籤的草稿FormId為NULL時要從分類的FormIds去取得分類(有可能多筆) |
-| 標籤建立日期（起／迄） | 日期輸入 | 區間篩選，預設近半年 |
+| 標籤母表 | 下拉選單 | 由後端提供依據「草稿的FormId」Group的母表清單，不是全部標籤母表<br/>注意，未填標籤的草稿FormId為NULL時要從分類的FormIds去取得分類(有可能多筆) |
+| 標籤建立日期（起／迄） | 日期輸入 | 區間篩選，無預設(避免撈不到無標籤的草稿) |
 | 草稿編號 | 多行文字框 | 可貼多筆（每行一筆） |
 
 查詢結果表：
@@ -271,7 +270,7 @@ Toolbar 邏輯：「批次送出審核」按鈕（呼叫 B12／B13）＋已勾�
 | 欄位 | 顯示／互動邏輯 |
 |---|---|
 | 下載勾選（`dl-check`） | 獨立控制「⬇下載標籤編輯檔」按鈕 enable/disable，與刪除機制脫鉤 |
-| 標籤（狀態） | 「通過」（綠）／「編輯」（粉）∕「未填」(橘) |
+| 標籤（狀態） | <span style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:600;background:#e6f4ea;color:#1e7e34;">通過</span>／<span style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:600;background:#fde8f2;color:#c2255c;">編輯</span>／<span style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:600;background:#fff2e0;color:#b25e09;">未填</span> |
 | 標籤母表 | 雙顯示邏輯：①狀態=通過→純文字（母表已確定）；②狀態=未填（無標籤草稿）→如果有多張母表則呈現下拉選單（預設分類的第1張母表）若無則直接文字顯示母表名稱；③狀態=編輯(有標籤草稿)→顯示該母表名稱，如果有多張母表則呈現下拉選單，若無則直接文字顯示母表名稱 |
 | 草稿編號／商品名稱／規格型號／品牌／全聯分類／標籤建立日期 | 純顯示 |
 | 操作 | 「刪除」單列按鈕（含確認彈窗，觸發 B14） |
@@ -288,7 +287,7 @@ Toolbar 邏輯：「⬇下載標籤編輯檔」（至少1筆 `dl-check` 勾選�
 | 欄位 | 顯示邏輯 |
 |---|---|
 | 檔案名稱／上傳時間／標籤筆數 | 純顯示 |
-| 狀態 | 「處理完成」／「格式錯誤」／「處理中」三態 |
+| 狀態 | 「處理完成」／「格式錯誤」二態 |
 | 操作 | 依狀態顯示對應動作連結 |
 
 ### F07｜[ECB2E-10180](https://pxec.atlassian.net/browse/ECB2E-10180)｜SCM>批次>F07_Step1-範本增加標籤欄位及作業注意事項(轉單)
@@ -317,7 +316,7 @@ Toolbar 邏輯：「⬇下載標籤編輯檔」（至少1筆 `dl-check` 勾選�
 | 欄位 | 顯示／互動邏輯 |
 |---|---|
 | 下載勾選（`dl-check`） | 同 F05 |
-| 標籤（狀態） | 「通過」（綠）／「編輯」（粉）／「未填」（橘）三態 |
+| 標籤（狀態） | <span style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:600;background:#e6f4ea;color:#1e7e34;">通過</span>／<span style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:600;background:#fde8f2;color:#c2255c;">編輯</span>／<span style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:600;background:#fff2e0;color:#b25e09;">未填</span> 三態 |
 | 標籤母表 | 雙顯示邏輯：①狀態=通過→純文字（母表已確定）；②狀態=未填（無標籤草稿）→如果有多張母表則呈現下拉選單（預設分類的第1張母表）若無則直接文字顯示母表名稱；③狀態=編輯(有標籤草稿)→顯示該母表名稱，如果有多張母表則呈現下拉選單，若無則直接文字顯示母表名稱 |
 | 其餘欄位／操作 | 同 F05 |
 
